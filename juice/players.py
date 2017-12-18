@@ -1,4 +1,3 @@
-from re import fullmatch
 from collections import namedtuple
 from urllib.parse import unquote
 
@@ -6,13 +5,13 @@ Player = namedtuple('Player','index name id')
 
 def indexed_query(server,obj,prop,index):
   server.write('{} {} {} ?\n'.format(obj,prop,index).encode('ascii'))
-  response = fullmatch(r'([a-z]+) ([a-z]+) ([0-9]+) (.+)\n',
-                       server.read_until(b'\n').decode('ascii'))
+  
+  response = server.read_until(b'\n').decode('ascii').split()
   try:
-    if response.group(1) == obj and \
-       response.group(2) == prop and \
-       int(response.group(3)) == index:
-      return unquote(response.group(4))
+    if response[0] == obj and \
+       response[1] == prop and \
+       int(response[2]) == index:
+      return unquote(response[3])
   except AttributeError:
     raise IndexError
   
@@ -22,8 +21,10 @@ def get_player_name(server, index):
 
 def get_player_count(server):
   server.write(b'player count ?\n')
-  response = server.read_until(b'\n').decode('ascii')
-  return int(fullmatch(r'player count ([0-9]+)\n', response).group(1))
+  response = server.read_until(b'\n').decode('ascii').split()
+  if response[0] == 'player' and \
+     response[1] == 'count':
+    return int(reponse[2])
   
 def get_player_id(server,index):
   return indexed_query(server,'player','id',index)
