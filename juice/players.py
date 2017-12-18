@@ -23,7 +23,6 @@ def get_player_name(server, index):
 def get_player_count(server):
   server.write(b'player count ?\n')
   response = server.read_until(b'\n').decode('ascii')
-  print(response)
   return int(fullmatch(r'player count ([0-9]+)\n', response).group(1))
   
 def get_player_id(server,index):
