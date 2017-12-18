@@ -35,6 +35,12 @@ class TestGetPlayerInfo(TestCase):
     self.tn.write.assert_called_once_with(b'player name 1 ?\n')
     self.tn.read_until.assert_called_once_with(b'\n')
 
+  def test_name_valid_index_space(self):
+    self.tn.read_until.return_value = b'player name 1 Dining%20Room\n'
+    self.assertEqual('Dining Room', get_player_name(self.tn,1))
+    self.tn.write.assert_called_once_with(b'player name 1 ?\n')
+    self.tn.read_until.assert_called_once_with(b'\n')
+
   def test_name_invalid_index(self):
     self.tn.read_until.return_value = b'player name 99\n'
     with self.assertRaises(IndexError):

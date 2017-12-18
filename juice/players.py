@@ -1,5 +1,6 @@
 from re import fullmatch
 from collections import namedtuple
+from urllib.parse import unquote
 
 Player = namedtuple('Player','index name id')
 
@@ -11,7 +12,7 @@ def indexed_query(server,obj,prop,index):
     if response.group(1) == obj and \
        response.group(2) == prop and \
        int(response.group(3)) == index:
-      return response.group(4)
+      return unquote(response.group(4))
   except AttributeError:
     raise IndexError
   
