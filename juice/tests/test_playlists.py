@@ -11,6 +11,14 @@ class TestCurrentPlaylist(TestCase):
     self.tn.write = MagicMock('write')
     self.tn.read_until = MagicMock('read')
 
+  def test_radio(self):
+    self.tn.read_until.return_value = \
+     b"00%3A04%3A20%3A17%3A4b%3A3b status 0 9999 tags%3Ala player_name%3AKitchen player_connected%3A1 player_ip%3A192.168.1.75%3A25329 power%3A1 signalstrength%3A68 mode%3Astop remote%3A1 current_title%3Acapital%20UK time%3A0 rate%3A1 mixer%20volume%3A25 playlist%20repeat%3A0 playlist%20shuffle%3A0 playlist%20mode%3Aoff seq_no%3A0 playlist_cur_index%3A0 playlist_timestamp%3A1513669016.13007 playlist_tracks%3A1 digital_volume_control%3A1 remoteMeta%3AHASH(0x62e0cb8) playlist%20index%3A0 id%3A-103741560 title%3ANew%20Rules artist%3ADua%20Lipa"
+    self.assertEqual([Track("New Rules", None, "Dua Lipa")],
+                     get_current_playlist(self.tn,'00:04:20:17:4b:3b'))
+    self.tn.write.assert_called_once_with(b"00:04:20:17:4b:3b status 0 9999 tags:la\n")
+    self.tn.read_until.assert_called_once_with(b'\n')
+
   def test_partially_played(self):
     self.maxDiff=None
     self.tn.read_until.return_value = \
