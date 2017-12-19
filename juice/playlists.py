@@ -13,9 +13,8 @@ def get_current_playlist(server,player_id):
     if tag[0] in ['title','album','artist']:
       if tag[0] in track:
         playlist.append(Track(track['title'],track.get('album',None),track['artist']))
-        track = {tag[0]: tag[1]}
-      else:
-        track[tag[0]] = tag[1]
+        track = {}
+      track[tag[0]] = tag[1]
   if track:
     playlist.append(Track(track['title'],track.get('album',None),track['artist']))
   return playlist

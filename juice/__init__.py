@@ -7,3 +7,5 @@ from .playlists import get_playing_title, get_playing_album, \
   get_playing_artist, get_playing_track, Track, get_current_playlist
 
 from .common import connect
+
+from .library import Artist, get_artists
