@@ -24,7 +24,7 @@ def get_player_count(server):
   response = server.read_until(b'\n').decode('ascii').split()
   if response[0] == 'player' and \
      response[1] == 'count':
-    return int(reponse[2])
+    return int(response[2])
   
 def get_player_id(server,index):
   return indexed_query(server,'player','id',index)
