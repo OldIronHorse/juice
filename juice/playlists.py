@@ -1,7 +1,7 @@
 from urllib.parse import unquote
 from collections import namedtuple
 
-Track = namedtuple('Track', 'track album artist')
+Track = namedtuple('Track', 'title album artist')
 
 def get_current_playlist(server,player_id):
   server.write('{} status 0 9999 tags:la\n'.format(player_id).encode('ascii'))
