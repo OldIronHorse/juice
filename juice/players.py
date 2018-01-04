@@ -14,7 +14,6 @@ def indexed_query(server,obj,prop,index):
       return unquote(response[3])
   except AttributeError:
     raise IndexError
-  
 
 def get_player_name(server, index):
   return indexed_query(server,'player','name',index)
@@ -34,3 +33,11 @@ def get_players(server):
   for i in range(0,get_player_count(server)):
     players.append(Player(i,get_player_name(server,i),get_player_id(server,i)))
   return players
+
+def play(server, id):
+  server.write('{} play\n'.format(id).encode('ascii'))
+  response = server.read_until(b'\n').decode('ascii').split()
+
+def pause(server, id):
+  server.write('{} pause\n'.format(id).encode('ascii'))
+  response = server.read_until(b'\n').decode('ascii').split()
