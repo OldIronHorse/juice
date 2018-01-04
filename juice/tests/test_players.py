@@ -4,7 +4,39 @@ from unittest.mock import MagicMock,patch
 from telnetlib import Telnet
 
 from juice import Player, get_players, get_player_name, get_player_id, \
-  play, pause
+  play, pause, state
+
+class TestState(TestCase):
+  def setUp(self):
+    self.tn = Telnet()
+    self.tn.write = MagicMock('write')
+    self.tn.read_until = MagicMock('read')
+
+  def test_invalid_id(self):
+    self.tn.read_until.return_value = b'00:12:34:56:78:90 mode \0x3f\n'
+    with self.assertRaises(ValueError):
+      state(self.tn,'00:12:34:56:78:90')
+    self.tn.write.assert_called_once_with(b'00:12:34:56:78:90 mode ?\n')
+    self.tn.read_until.assert_called_once_with(b'\n')
+
+  def test_play(self):
+    self.tn.read_until.return_value = b'00:12:34:56:78:90 mode play\n'
+    self.assertEqual('play', state(self.tn,'00:12:34:56:78:90'))
+    self.tn.write.assert_called_once_with(b'00:12:34:56:78:90 mode ?\n')
+    self.tn.read_until.assert_called_once_with(b'\n')
+
+  def test_pause(self):
+    self.tn.read_until.return_value = b'00:12:34:56:78:90 mode pause\n'
+    self.assertEqual('pause', state(self.tn,'00:12:34:56:78:90'))
+    self.tn.write.assert_called_once_with(b'00:12:34:56:78:90 mode ?\n')
+    self.tn.read_until.assert_called_once_with(b'\n')
+
+  def test_stop(self):
+    self.tn.read_until.return_value = b'00:12:34:56:78:90 mode stop\n'
+    self.assertEqual('stop', state(self.tn,'00:12:34:56:78:90'))
+    self.tn.write.assert_called_once_with(b'00:12:34:56:78:90 mode ?\n')
+    self.tn.read_until.assert_called_once_with(b'\n')
+
 
 class TestControl(TestCase):
   def setUp(self):

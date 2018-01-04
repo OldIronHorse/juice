@@ -10,7 +10,7 @@ def indexed_query(server,obj,prop,index):
   try:
     if response[0] == obj and \
        response[1] == prop and \
-       int(response[2]) == index:
+       unquote(response[2]) == str(index):
       return unquote(response[3])
   except AttributeError:
     raise IndexError
@@ -41,3 +41,10 @@ def play(server, id):
 def pause(server, id):
   server.write('{} pause\n'.format(id).encode('ascii'))
   response = server.read_until(b'\n').decode('ascii').split()
+
+def state(server, id):
+  server.write('{} mode ?\n'.format(id).encode('ascii'))
+  response = server.read_until(b'\n').decode('ascii').split()
+  if response[2] not in ['play','pause','stop']:
+    raise ValueError
+  return response[2]
