@@ -48,3 +48,11 @@ def state(server, id):
   if response[2] not in ['play','pause','stop']:
     raise ValueError
   return response[2]
+
+def get_player_volume(server, id):
+  server.write('{} mixer volume ?\n'.format(id).encode('ascii'))
+  return int(server.read_until(b'\n').decode('ascii').split()[3])
+
+def set_player_volume(server, id, vol):
+  server.write('{} mixer volume {}\n'.format(id, vol).encode('ascii'))
+  server.read_until(b'\n')

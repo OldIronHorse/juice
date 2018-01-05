@@ -4,13 +4,39 @@ from unittest.mock import MagicMock,patch
 from telnetlib import Telnet
 
 from juice import Player, get_players, get_player_name, get_player_id, \
-  play, pause, state
+  play, pause, state, get_player_volume, set_player_volume
 
 class TestWithServer(TestCase):
   def setUp(self):
     self.tn = Telnet()
     self.tn.write = MagicMock('write')
     self.tn.read_until = MagicMock('read')
+
+class TestVolume(TestWithServer):
+  def test_get_volume(self):
+    self.tn.read_until.return_value=b'00:12:34:56:78:90 mixer volume 75\n'
+    self.assertEqual(75,get_player_volume(self.tn,'00:12:34:56:78:90'))
+    self.tn.write.assert_called_once_with(b'00:12:34:56:78:90 mixer volume ?\n')
+    self.tn.read_until.assert_called_once_with(b'\n')
+
+  def test_set_volume_set(self):
+    self.tn.read_until.return_value=b'00:12:34:56:78:90 mixer volume 75\n'
+    set_player_volume(self.tn,'00:12:34:56:78:90', 75)
+    self.tn.write.assert_called_once_with(b'00:12:34:56:78:90 mixer volume 75\n')
+    self.tn.read_until.assert_called_once_with(b'\n')
+    
+  def test_set_volume_inc(self):
+    self.tn.read_until.return_value=b'00:12:34:56:78:90 mixer volume +15\n'
+    set_player_volume(self.tn,'00:12:34:56:78:90', '+15')
+    self.tn.write.assert_called_once_with(b'00:12:34:56:78:90 mixer volume +15\n')
+    self.tn.read_until.assert_called_once_with(b'\n')
+    
+  def test_set_volume_dec(self):
+    self.tn.read_until.return_value=b'00:12:34:56:78:90 mixer volume -15\n'
+    set_player_volume(self.tn,'00:12:34:56:78:90', '-15')
+    self.tn.write.assert_called_once_with(b'00:12:34:56:78:90 mixer volume -15\n')
+    self.tn.read_until.assert_called_once_with(b'\n')
+    
 
 
 class TestState(TestWithServer):
