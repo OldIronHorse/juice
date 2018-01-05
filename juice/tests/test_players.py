@@ -6,12 +6,14 @@ from telnetlib import Telnet
 from juice import Player, get_players, get_player_name, get_player_id, \
   play, pause, state
 
-class TestState(TestCase):
+class TestWithServer(TestCase):
   def setUp(self):
     self.tn = Telnet()
     self.tn.write = MagicMock('write')
     self.tn.read_until = MagicMock('read')
 
+
+class TestState(TestWithServer):
   def test_invalid_id(self):
     self.tn.read_until.return_value = b'00:12:34:56:78:90 mode \0x3f\n'
     with self.assertRaises(ValueError):
@@ -38,12 +40,7 @@ class TestState(TestCase):
     self.tn.read_until.assert_called_once_with(b'\n')
 
 
-class TestControl(TestCase):
-  def setUp(self):
-    self.tn = Telnet()
-    self.tn.write = MagicMock('write')
-    self.tn.read_until = MagicMock('read')
-
+class TestControl(TestWithServer):
   def test_play(self):
     self.tn.read_until.return_value = b'00:12:34:56:78:90 play\n'
     play(self.tn,'00:12:34:56:78:90')
@@ -75,12 +72,7 @@ class TestGetPlayers(TestCase):
                       get_players(None))
 
     
-class TestGetPlayerInfo(TestCase):
-  def setUp(self):
-    self.tn = Telnet()
-    self.tn.write = MagicMock('write')
-    self.tn.read_until = MagicMock('read')
-
+class TestGetPlayerInfo(TestWithServer):
   def test_name_valid_index(self):
     self.tn.read_until.return_value = b'player name 1 Lounge\n'
     self.assertEqual('Lounge', get_player_name(self.tn,1))
