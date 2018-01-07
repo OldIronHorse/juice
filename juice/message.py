@@ -87,11 +87,32 @@ def parse_syncgroups(msg):
   except KeyError:
     return {'ids':[], 'names': []}
 
+def parse_players(msg):
+  cmd, start, max_count, player_count, fields = msg.split(' ', 4)
+  _, player_count = unquote(player_count).split(':',1)
+  players = []
+  for field in fields.split(' '):
+    k, v = unquote(field).split(':',1)
+    try:
+      if k not in ['firmware']:
+        v = int(v)
+    except ValueError:
+      pass
+    if k == 'playerindex':
+      player = {'index': v}
+      players.append(player)
+    elif k == 'playerid':
+      player['id'] = v
+    else:
+      player[k] = v
+  return {'player_count': int(player_count), 'players': players}
+
 cmd_parsers = {
   'login': parse_login,
   'listen': parse_listen,
   'subscribe': parse_subscribe,
   'player' : parse_player,
+  'players' : parse_players,
   'syncgroups': parse_syncgroups,
 }
 

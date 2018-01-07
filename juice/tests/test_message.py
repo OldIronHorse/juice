@@ -219,3 +219,42 @@ class TestMixer(TestCase):
     },
     parse_msg('00%3A04%3A20%3A23%3A30%3A7f mixer volume -5'))
 
+class TestPlayers(TestCase):
+  def test_2_of_3(self):
+    self.maxDiff = None
+    self.assertEqual({
+      'player_count': 3,
+      'players': [{
+        'index': 0,
+        'id': '00:04:20:17:4b:3b',
+        'uuid': '39c8dbb3bf7d756d013348f4eca8e130',
+        'ip': '192.168.1.75:28225',
+        'name': 'Kitchen',
+        'seq_no': 0,
+        'model': 'receiver',
+        'modelname': 'Squeezebox Receiver',
+        'power': 1,
+        'isplaying': 0,
+        'displaytype': 'none',
+        'isplayer': 1,
+        'canpoweroff': 1,
+        'connected': 1,
+        'firmware': '77'
+      },{
+        'index': 1,
+        'id': '00:0f:55:a6:65:e5',
+        'uuid': '',
+        'ip': '192.168.1.82:57600',
+        'name': 'Dining Room',
+        'seq_no': 0,
+        'model': 'squeezelite',
+        'modelname': 'SqueezeLite',
+        'power': 1,
+        'isplaying': 0,
+        'displaytype': 'none',
+        'isplayer': 1,
+        'canpoweroff': 1,
+        'connected': 1,
+        'firmware': 'v1.8.7-999'
+      }]},
+    parse_msg('players 0 2 count%3A3 playerindex%3A0 playerid%3A00%3A04%3A20%3A17%3A4b%3A3b uuid%3A39c8dbb3bf7d756d013348f4eca8e130 ip%3A192.168.1.75%3A28225 name%3AKitchen seq_no%3A0 model%3Areceiver modelname%3ASqueezebox%20Receiver power%3A1 isplaying%3A0 displaytype%3Anone isplayer%3A1 canpoweroff%3A1 connected%3A1 firmware%3A77 playerindex%3A1 playerid%3A00%3A0f%3A55%3Aa6%3A65%3Ae5 uuid%3A ip%3A192.168.1.82%3A57600 name%3ADining%20Room seq_no%3A0 model%3Asqueezelite modelname%3ASqueezeLite power%3A1 isplaying%3A0 displaytype%3Anone isplayer%3A1 canpoweroff%3A1 connected%3A1 firmware%3Av1.8.7-999'))
