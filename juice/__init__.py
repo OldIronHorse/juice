@@ -7,6 +7,6 @@ from .players import get_players, get_player_count, get_player_name, \
 from .playlists import get_playing_title, get_playing_album, \
   get_playing_artist, get_playing_track, Track, get_current_playlist
 
-from .common import connect
+from .common import connect, listen, subscribe_status, read_loop
 
 from .library import Artist, get_artists
