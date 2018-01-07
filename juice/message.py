@@ -26,11 +26,43 @@ def parse_subscribe(msg):
   command, notifications = msg.split(' ')
   return {'command':command, 'notifications': notifications.split(',')}
 
+def player_count_parser(cmd, subcmd, rest):
+  return {'command': cmd, subcmd: int(rest)}
+
+def player_indexed_parser(cmd, subcmd, rest):
+  index, player_id = rest.split(' ')
+  try:
+    return {'command': cmd, subcmd: player_id, 'index': int(index)}
+  except ValueError:
+    return {'command': cmd, subcmd: player_id, 'id': index}
+    
+def player_indexed_number_parser(cmd, subcmd, rest):
+  result = player_indexed_parser(cmd, subcmd, rest)
+  result[subcmd] = int(result[subcmd])
+  return result
+
+
+player_subparsers = {
+  'count': player_count_parser,
+  'id': player_indexed_parser,
+  'uuid': player_indexed_parser,
+  'name': player_indexed_parser,
+  'ip': player_indexed_parser,
+  'model': player_indexed_parser,
+  'isplayer': player_indexed_number_parser,
+}
+
+def parse_player(msg):
+  cmd, subcmd, rest= msg.split(' ',2)
+  return player_subparsers[subcmd](cmd, subcmd, rest)
+
+
 cmd_parsers = {
   'login': parse_login,
   'listen': parse_listen,
   'subscribe': parse_subscribe,
-  }
+  'player' : parse_player,
+}
 
 def parse_msg(msg):
   cmd, _ = msg.split(' ', 1)

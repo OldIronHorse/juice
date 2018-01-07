@@ -2,7 +2,7 @@ from unittest import TestCase
 from unittest.mock import MagicMock,patch
 
 from juice.message import parse_msg, InvalidMsgException,\
-  parse_login, parse_listen, parse_subscribe
+  parse_login, parse_listen, parse_subscribe, parse_player
 
 class TestLogin(TestCase):
   def test_valid(self):
@@ -63,6 +63,70 @@ class TestSubscribe(TestCase):
       },
       parse_subscribe('subscribe mixer,pause,play'))
 
+class TestPlayer(TestCase):
+  def test_count_valid(self):
+    self.assertEqual({
+        'command': 'player',
+        'count': 4
+      },
+      parse_player('player count 4'))
+
+  def test_id_valid(self):
+    self.assertEqual({
+      'command': 'player',
+      'index': 1,
+      'id': '00%3A0f%3A55%3Aa6%3A65%3Ae5',
+    },
+    parse_player('player id 1 00%3A0f%3A55%3Aa6%3A65%3Ae5'))
+
+  def test_uuid_valid(self):
+    self.assertEqual({
+      'command': 'player',
+      'index': 0,
+      'uuid': '012345678901234567890123456789012',
+    },
+    parse_player('player uuid 0 012345678901234567890123456789012'))
+
+  def test_name_valid(self):
+    self.assertEqual({
+      'command': 'player',
+      'index': 2,
+      'name': 'Dining%20Room',
+    },
+    parse_player('player name 2 Dining%20Room'))
+    
+  def test_ip_valid(self):
+    self.assertEqual({
+      'command': 'player',
+      'index': 0,
+      'ip': '192.168.1.22:3483',
+    },
+    parse_player('player ip 0 192.168.1.22:3483'))
+
+  def test_ip_id(self):
+    self.assertEqual({
+      'command': 'player',
+      'id': '00%3A0f%3A55%3Aa6%3A65%3Ae5',
+      'ip': '192.168.1.22:3483',
+    },
+    parse_player('player ip 00%3A0f%3A55%3Aa6%3A65%3Ae5 192.168.1.22:3483'))
+    
+  def test_model_valid(self):
+    self.assertEqual({
+      'command': 'player',
+      'index': 0,
+      'model': 'squeezelite',
+    },
+    parse_player('player model 0 squeezelite'))
+
+  def test_isplayer(self):
+    self.assertEqual({
+      'command': 'player',
+      'index': 1,
+      'isplayer': 0,
+    },
+    parse_player('player isplayer 1 0'))
+
 
 class TestParseMsg(TestCase):
   def test_unknown_cmd(self):
@@ -89,4 +153,11 @@ class TestParseMsg(TestCase):
         'notifications': ['mixer', 'pause', 'play'],
       },
       parse_msg('subscribe mixer,pause,play'))
+
+  def test_valid_player_count(self):
+    self.assertEqual({
+        'command': 'player',
+        'count': 4
+      },
+      parse_msg('player count 4'))
 
