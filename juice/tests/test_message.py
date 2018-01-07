@@ -10,15 +10,15 @@ class TestLogin(TestCase):
         'command': 'login',
         'user': 'myusername'
       },
-      parse_login('login myusername ******'))
+      parse_msg('login myusername ******'))
 
   def test_missing_field(self):
     with self.assertRaises(InvalidMsgException):
-      parse_login('login myusername')
+      parse_msg('login myusername')
 
   def test_wrong_value(self):
     with self.assertRaises(InvalidMsgException):
-      parse_login('login myusername an_unexpected_value')
+      parse_msg('login myusername an_unexpected_value')
 
 
 class TestListen(TestCase):
@@ -27,26 +27,27 @@ class TestListen(TestCase):
         'command': 'listen',
         'value' : 0,
       },
-      parse_listen('listen 0'))
+      parse_msg('listen 0'))
 
   def test_valid_1(self):
     self.assertEqual({
         'command': 'listen',
         'value' : 1,
       },
-      parse_listen('listen 1'))
+      parse_msg('listen 1'))
 
   def test_invalid_value(self):
     with self.assertRaises(InvalidMsgException):
-      parse_listen('listen 2')
+      parse_msg('listen 2')
 
   def test_invalid_value_type(self):
     with self.assertRaises(InvalidMsgException):
-      parse_listen('listen not_listening')
+      parse_msg('listen not_listening')
 
   def test_missing_field(self):
     with self.assertRaises(InvalidMsgException):
-      parse_listen('listen')
+      parse_msg('listen')
+
 
 class TestSubscribe(TestCase):
   def test_valid_single(self):
@@ -54,14 +55,15 @@ class TestSubscribe(TestCase):
         'command': 'subscribe',
         'notifications': ['mixer'],
       },
-      parse_subscribe('subscribe mixer'))
+      parse_msg('subscribe mixer'))
 
   def test_valid_multiple(self):
     self.assertEqual({
         'command': 'subscribe',
         'notifications': ['mixer', 'pause', 'play'],
       },
-      parse_subscribe('subscribe mixer,pause,play'))
+      parse_msg('subscribe mixer,pause,play'))
+
 
 class TestPlayer(TestCase):
   def test_count_valid(self):
@@ -69,7 +71,7 @@ class TestPlayer(TestCase):
         'command': 'player',
         'count': 4
       },
-      parse_player('player count 4'))
+      parse_msg('player count 4'))
 
   def test_id_valid(self):
     self.assertEqual({
@@ -77,7 +79,7 @@ class TestPlayer(TestCase):
       'index': 1,
       'id': '00:0f:55:a6:65:e5',
     },
-    parse_player('player id 1 00%3A0f%3A55%3Aa6%3A65%3Ae5'))
+    parse_msg('player id 1 00%3A0f%3A55%3Aa6%3A65%3Ae5'))
 
   def test_uuid_valid(self):
     self.assertEqual({
@@ -85,7 +87,7 @@ class TestPlayer(TestCase):
       'index': 0,
       'uuid': '012345678901234567890123456789012',
     },
-    parse_player('player uuid 0 012345678901234567890123456789012'))
+    parse_msg('player uuid 0 012345678901234567890123456789012'))
 
   def test_name_valid(self):
     self.assertEqual({
@@ -93,7 +95,7 @@ class TestPlayer(TestCase):
       'index': 2,
       'name': 'Dining Room',
     },
-    parse_player('player name 2 Dining%20Room'))
+    parse_msg('player name 2 Dining%20Room'))
     
   def test_ip_valid(self):
     self.assertEqual({
@@ -101,7 +103,7 @@ class TestPlayer(TestCase):
       'index': 0,
       'ip': '192.168.1.22:3483',
     },
-    parse_player('player ip 0 192.168.1.22:3483'))
+    parse_msg('player ip 0 192.168.1.22:3483'))
 
   def test_ip_id(self):
     self.assertEqual({
@@ -109,7 +111,7 @@ class TestPlayer(TestCase):
       'id': '00:0f:55:a6:65:e5',
       'ip': '192.168.1.22:3483',
     },
-    parse_player('player ip 00%3A0f%3A55%3Aa6%3A65%3Ae5 192.168.1.22:3483'))
+    parse_msg('player ip 00%3A0f%3A55%3Aa6%3A65%3Ae5 192.168.1.22:3483'))
     
   def test_model_valid(self):
     self.assertEqual({
@@ -117,7 +119,7 @@ class TestPlayer(TestCase):
       'index': 0,
       'model': 'squeezelite',
     },
-    parse_player('player model 0 squeezelite'))
+    parse_msg('player model 0 squeezelite'))
 
   def test_isplayer(self):
     self.assertEqual({
@@ -125,7 +127,7 @@ class TestPlayer(TestCase):
       'index': 1,
       'isplayer': 0,
     },
-    parse_player('player isplayer 1 0'))
+    parse_msg('player isplayer 1 0'))
 
 class TestPlayerId(TestCase):
   def test_signalstrength(self):
@@ -133,57 +135,17 @@ class TestPlayerId(TestCase):
       'id': '00:04:20:23:30:7f',
       'signalstrength': 62,
     },
-    parse_id('00%3A04%3A20%3A23%3A30%3A7f signalstrength 62'))
+    parse_msg('00%3A04%3A20%3A23%3A30%3A7f signalstrength 62'))
 
   def test_name(self):
     self.assertEqual({
       'id': '00:04:20:23:30:7f',
       'name': 'Dining Room',
     },
-    parse_id('00%3A04%3A20%3A23%3A30%3A7f name Dining%20Room'))
+    parse_msg('00%3A04%3A20%3A23%3A30%3A7f name Dining%20Room'))
 
 
-
-class TestParseMsg(TestCase):
-  def test_unknown_cmd(self):
-    with self.assertRaises(InvalidMsgException):
-      parse_msg('not_a_cmd some more stuff')
-
-  def test_valid_login(self):
-    self.assertEqual({
-        'command': 'login',
-        'user': 'myusername'
-      },
-      parse_msg('login myusername ******'))
-  
-  def test_valid_listen(self):
-    self.assertEqual({
-        'command': 'listen',
-        'value' : 0,
-      },
-      parse_msg('listen 0'))
-
-  def test_valid_subscribe(self):
-    self.assertEqual({
-        'command': 'subscribe',
-        'notifications': ['mixer', 'pause', 'play'],
-      },
-      parse_msg('subscribe mixer,pause,play'))
-
-  def test_valid_player_count(self):
-    self.assertEqual({
-        'command': 'player',
-        'count': 4
-      },
-      parse_msg('player count 4'))
-
-  def test_signalstrength(self):
-    self.assertEqual({
-      'id': '00:04:20:23:30:7f',
-      'signalstrength': 62,
-    },
-    parse_msg('00%3A04%3A20%3A23%3A30%3A7f signalstrength 62'))
-
+class TestPlayerId(TestCase):
   def test_connected(self):
     self.assertEqual({
       'id': '00:04:20:23:30:7f',
@@ -219,6 +181,8 @@ class TestParseMsg(TestCase):
     },
     parse_msg('00%3A04%3A20%3A23%3A30%3A7f sync -'))
 
+
+class TestSyncGroups(TestCase):
   def test_syncgroups_none(self):
     self.assertEqual({
       'ids': [],
@@ -232,3 +196,11 @@ class TestParseMsg(TestCase):
       'names': ['Kitchen', 'Dining Room'],
     },
     parse_msg('syncgroups sync_members%3A00%3A04%3A20%3A17%3A4b%3A3b%2C00%3A0f%3A55%3Aa6%3A65%3Ae5 sync_member_names%3AKitchen%2CDining%20Room'))
+
+
+class TestParseMsg(TestCase):
+  def test_unknown_cmd(self):
+    with self.assertRaises(InvalidMsgException):
+      parse_msg('not_a_cmd some more stuff')
+
+
