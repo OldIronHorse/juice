@@ -1,8 +1,7 @@
 from unittest import TestCase
 from unittest.mock import MagicMock,patch
 
-from juice.message import parse_msg, InvalidMsgException,\
-  parse_login, parse_listen, parse_subscribe, parse_player, parse_id
+from juice.message import parse_msg, InvalidMsgException
 
 class TestLogin(TestCase):
   def test_valid(self):
@@ -198,9 +197,25 @@ class TestSyncGroups(TestCase):
     parse_msg('syncgroups sync_members%3A00%3A04%3A20%3A17%3A4b%3A3b%2C00%3A0f%3A55%3Aa6%3A65%3Ae5 sync_member_names%3AKitchen%2CDining%20Room'))
 
 
-class TestParseMsg(TestCase):
-  def test_unknown_cmd(self):
-    with self.assertRaises(InvalidMsgException):
-      parse_msg('not_a_cmd some more stuff')
+class TestMixer(TestCase):
+  def test_volume_set(self):
+    self.assertEqual({
+      'id': '00:04:20:23:30:7f',
+      'volume': 25,
+    },
+    parse_msg('00%3A04%3A20%3A23%3A30%3A7f mixer volume 25'))
 
+  def test_volume_inc(self):
+    self.assertEqual({
+      'id': '00:04:20:23:30:7f',
+      'volume_change': 5,
+    },
+    parse_msg('00%3A04%3A20%3A23%3A30%3A7f mixer volume +5'))
+
+  def test_volume_dec(self):
+    self.assertEqual({
+      'id': '00:04:20:23:30:7f',
+      'volume_change': -5,
+    },
+    parse_msg('00%3A04%3A20%3A23%3A30%3A7f mixer volume -5'))
 

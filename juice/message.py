@@ -60,14 +60,20 @@ def parse_player(msg):
   return player_subparsers[subcmd](cmd, subcmd, rest)
 
 def parse_id(msg):
-  player_id, cmd, value = msg.split(' ')
+  player_id, cmd, value = msg.split(' ',2)
+  reply = {'id': unquote(player_id)}
+  if cmd == 'mixer':
+    cmd, value = value.split(' ')
+    if value.startswith('-') or value.startswith('+'):
+      cmd += '_change'
   try:
-    return {'id': unquote(player_id), cmd: int(value)}
+    reply[cmd] = int(value)
   except ValueError:
     try:
-      return {'id': unquote(player_id), cmd: float(value)}
+      reply[cmd] = float(value)
     except ValueError:
-      return {'id': unquote(player_id), cmd: unquote(value)}
+      reply[cmd] = unquote(value)
+  return reply
 
 def parse_syncgroups(msg):
   fields = msg.split(' ')
