@@ -1,3 +1,4 @@
+from urllib.parse import unquote
 
 class InvalidMsgException(Exception):
   pass
@@ -31,10 +32,12 @@ def player_count_parser(cmd, subcmd, rest):
 
 def player_indexed_parser(cmd, subcmd, rest):
   index, player_id = rest.split(' ')
+  if subcmd in ['id', 'name']:
+    player_id = unquote(player_id)
   try:
     return {'command': cmd, subcmd: player_id, 'index': int(index)}
   except ValueError:
-    return {'command': cmd, subcmd: player_id, 'id': index}
+    return {'command': cmd, subcmd: player_id, 'id': unquote(index)}
     
 def player_indexed_number_parser(cmd, subcmd, rest):
   result = player_indexed_parser(cmd, subcmd, rest)
@@ -56,18 +59,42 @@ def parse_player(msg):
   cmd, subcmd, rest= msg.split(' ',2)
   return player_subparsers[subcmd](cmd, subcmd, rest)
 
+def parse_id(msg):
+  player_id, cmd, value = msg.split(' ')
+  try:
+    return {'id': unquote(player_id), cmd: int(value)}
+  except ValueError:
+    try:
+      return {'id': unquote(player_id), cmd: float(value)}
+    except ValueError:
+      return {'id': unquote(player_id), cmd: unquote(value)}
+
+def parse_syncgroups(msg):
+  fields = msg.split(' ')
+  cmd = fields[0]
+  kvs = {k: v for k, v in [unquote(field).split(':',1) for field in fields[1:]]}
+  try:
+    return {
+        'ids': unquote(kvs['sync_members']).split(','),
+        'names': unquote(kvs['sync_member_names']).split(','),
+      }
+  except KeyError:
+    return {'ids':[], 'names': []}
 
 cmd_parsers = {
   'login': parse_login,
   'listen': parse_listen,
   'subscribe': parse_subscribe,
   'player' : parse_player,
+  'syncgroups': parse_syncgroups,
 }
 
 def parse_msg(msg):
-  cmd, _ = msg.split(' ', 1)
+  cmd = msg.split(' ', 1)[0]
   try:
     return cmd_parsers[cmd](msg)
   except KeyError:
-    raise InvalidMsgException
-
+    try:
+      return parse_id(msg)
+    except ValueError:
+      raise InvalidMsgException
