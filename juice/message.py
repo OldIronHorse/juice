@@ -137,18 +137,30 @@ def parse_info(msg):
   return info_subparsers[subcmd][category](rest)
 
 def parse_library(msg):
+  print(msg)
   cmd, start, page_size, rest = msg.split(' ', 3)
   reply = {'start': int(start), 'page_size': int(page_size)}
   fields = rest.split(' ')
   result_list = []
   result_type = cmd[0:-1]
   reply[cmd] = result_list
+  parsing_list = False;
   for field in fields:
     k, v = unquote(field).split(':', 1)
     if k == 'id':
-      result_list.append({k: int(v)})
-    elif k == result_type:
-      result_list[-1]['name'] = v
+      parsing_list = True
+    if parsing_list:
+      if k == 'id':
+        result_list.append({k: int(v)})
+      elif k == result_type:
+        result_list[-1]['name'] = v
+      elif k == 'count':
+          reply[k] = int(v)
+      else:
+        try:
+          result_list[-1][k] = int(v)
+        except ValueError:
+          result_list[-1][k] = v
     else:
       try:
         reply[k] = int(v)
@@ -166,6 +178,7 @@ cmd_parsers = {
   'info': parse_info,
   'genres': parse_library,
   'artists': parse_library,
+  'albums': parse_library,
 }
 
 def parse_msg(msg):

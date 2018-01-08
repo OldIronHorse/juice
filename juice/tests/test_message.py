@@ -379,3 +379,52 @@ class TestArtists(TestCase):
         {'id': 19, 'name': 'Sarah Connor'},
       ]},
       parse_msg('artists 0 5 genre_id:7 count:2 id:2 artist:Anastacia id:19 artist:Sarah%20Connor'))
+
+
+class TestAlbums(TestCase):
+  def setUp(self):
+    self.maxDiff = None
+
+  def test_no_filtre_no_tags(self):
+    self.assertEqual({
+      'count': 14,
+      'start': 0,
+      'page_size': 4,
+      'albums': [
+        {'id': 1, 'name': 'Amadeus (Disc 1 of 2)'},
+        {'id': 4, 'name': 'Anastacia'},
+        {'id': 5, 'name': 'Bounce [Single]'},
+        {'id': 6, 'name': 'Fallen'},
+      ]},
+      parse_msg('albums 0 4 count:14 id:1 album:Amadeus%20(Disc%201%20of%202) id:4 album:Anastacia id:5 album:Bounce%20[Single] id:6 album:Fallen'))
+
+  def test_artist_filter_no_tags(self):
+    self.assertEqual({
+      'artist_id': 19,
+      'count': 1,
+      'start': 0,
+      'page_size': 5,
+      'albums': [
+        {'id': 5, 'name': 'Bounce [Single]'},
+      ]},
+      parse_msg('albums 0 5 artist_id:19 count:1 id:5 album:Bounce%20[Single]'))
+
+  def test_no_filter_all_tags(self):
+    self.assertEqual({
+      'tags': 'lytiqwaS',
+      'count': 597,
+      'start': 102,
+      'page_size': 1,
+      'albums': [
+        {'id': 558,
+         'name': 'Classics for Children',
+         'year': 1999,
+         'title': 'Classics for Children',
+         'disc': 2,
+         'disccount': 2,
+         'compilation': 1,
+         'artist': 'Various Artists',
+         'artist_id': 3,
+        },
+      ]},
+      parse_msg('albums 102 1 tags%3AlytiqwaS id%3A558 album%3AClassics%20for%20Children year%3A1999 title%3AClassics%20for%20Children disc%3A2 disccount%3A2 compilation%3A1 artist_id%3A3 artist%3AVarious%20Artists count%3A597'))
