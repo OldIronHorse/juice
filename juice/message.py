@@ -107,6 +107,54 @@ def parse_players(msg):
       player[k] = v
   return {'player_count': int(player_count), 'players': players}
 
+def parse_total_genres(msg):
+  return {'genre_count': int(msg)}
+
+def parse_total_artists(msg):
+  return {'artist_count': int(msg)}
+
+def parse_total_albums(msg):
+  return {'album_count': int(msg)}
+
+def parse_total_songs(msg):
+  return {'song_count': int(msg)}
+
+def parse_total_duration(msg):
+  return {'total_duration': int(msg)}
+
+info_subparsers = {
+  'total': {
+    'genres': parse_total_genres,
+    'artists': parse_total_artists,
+    'albums': parse_total_albums,
+    'songs': parse_total_songs,
+    'duration': parse_total_duration,
+    },
+  }
+
+def parse_info(msg):
+  cmd, subcmd, category, rest = msg.split(' ', 3)
+  return info_subparsers[subcmd][category](rest)
+
+def parse_genres(msg):
+  cmd, start, page_size, rest = msg.split(' ', 3)
+  reply = {'start': int(start), 'page_size': int(page_size)}
+  fields = rest.split(' ')
+  genres = []
+  reply['genres'] = genres
+  for field in fields:
+    k, v = unquote(field).split(':', 1)
+    if k == 'id':
+      genres.append({k: int(v)})
+    elif k == 'genre':
+      genres[-1]['name'] = v
+    else:
+      try:
+        reply[k] = int(v)
+      except ValueError:
+        reply[k] = v
+  return reply
+
 cmd_parsers = {
   'login': parse_login,
   'listen': parse_listen,
@@ -114,6 +162,8 @@ cmd_parsers = {
   'player' : parse_player,
   'players' : parse_players,
   'syncgroups': parse_syncgroups,
+  'info': parse_info,
+  'genres': parse_genres,
 }
 
 def parse_msg(msg):

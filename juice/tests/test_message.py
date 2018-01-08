@@ -281,3 +281,70 @@ class TestPlayers(TestCase):
         'firmware': '7.8.0-r16754'
       }]},
     parse_msg('players 2 2 count%3A3 playerindex%3A2 playerid%3A00%3A04%3A20%3A23%3A30%3A7f uuid%3Ab0ff501bdcff1d6a18e0965b23844c94 ip%3A192.168.1.69%3A36472 name%3ALounge seq_no%3A4 model%3Afab4 modelname%3ASqueezebox%20Touch power%3A1 isplaying%3A0 displaytype%3Anone isplayer%3A1 canpoweroff%3A1 connected%3A1 firmware%3A7.8.0-r16754'))
+
+
+class TestInfo(TestCase):
+  def test_total_genres(self):
+    self.assertEqual({'genre_count': 18},
+      parse_msg('info total genres 18'))
+
+  def test_total_artists(self):
+    self.assertEqual({'artist_count': 18},
+      parse_msg('info total artists 18'))
+
+  def test_total_albums(self):
+    self.assertEqual({'album_count': 18},
+      parse_msg('info total albums 18'))
+
+  def test_total_songs(self):
+    self.assertEqual({'song_count': 18},
+      parse_msg('info total songs 18'))
+
+  def test_total_duration(self):
+    self.assertEqual({'total_duration': 181234},
+      parse_msg('info total duration 181234'))
+
+class TestGenres(TestCase):
+  def setUp(self):
+    self.maxDiff = None
+
+  def test_no_filtre(self):
+    self.assertEqual({
+      'count': 6,
+      'start': 0,
+      'page_size': 5,
+      'genres': [
+        {'id': 3, 'name': 'Acid Jazz'},
+        {'id': 4, 'name': 'Alternative & Punk'},
+        {'id': 5, 'name': 'French'},
+        {'id': 6, 'name': 'No Genre'},
+        {'id': 7, 'name': 'Pop'},
+      ]},
+      parse_msg('genres 0 5 count:6 id:3 genre:Acid%20Jazz id:4 genre:Alternative%20&%20Punk id:5 genre:French id:6 genre:No%20Genre id:7 genre:Pop'))
+
+  def test_no_filtre_rescan(self):
+    self.maxDiff = None
+    self.assertEqual({
+      'rescan': 1,
+      'count': 6,
+      'start': 0,
+      'page_size': 5,
+      'genres': [
+        {'id': 3, 'name': 'Acid Jazz'},
+        {'id': 4, 'name': 'Alternative & Punk'},
+        {'id': 5, 'name': 'French'},
+        {'id': 6, 'name': 'No Genre'},
+        {'id': 7, 'name': 'Pop'},
+      ]},
+      parse_msg('genres 0 5 rescan%3A1 count:6 id:3 genre:Acid%20Jazz id:4 genre:Alternative%20&%20Punk id:5 genre:French id:6 genre:No%20Genre id:7 genre:Pop'))
+
+  def test_search(self):
+    self.assertEqual({
+      'count': 1,
+      'start': 0,
+      'page_size': 5,
+      'search': 'unk',
+      'genres': [
+        {'id': 4, 'name': 'Alternative & Punk'},
+      ]},
+      parse_msg('genres 0 5 search%3Aunk count%3A1 id%3A4 genre%3AAlternative%20&%20Punk'))
