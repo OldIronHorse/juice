@@ -140,15 +140,15 @@ def parse_library(msg):
   cmd, start, page_size, rest = msg.split(' ', 3)
   reply = {'start': int(start), 'page_size': int(page_size)}
   fields = rest.split(' ')
-  genres = []
-  singular = cmd[0:-1]
-  reply[cmd] = genres
+  result_list = []
+  result_type = cmd[0:-1]
+  reply[cmd] = result_list
   for field in fields:
     k, v = unquote(field).split(':', 1)
     if k == 'id':
-      genres.append({k: int(v)})
-    elif k == singular:
-      genres[-1]['name'] = v
+      result_list.append({k: int(v)})
+    elif k == result_type:
+      result_list[-1]['name'] = v
     else:
       try:
         reply[k] = int(v)
