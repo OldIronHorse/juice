@@ -443,3 +443,21 @@ class TestYears(TestCase):
       },
       parse_msg('years 0 2 year%3A2017 year%3A2016 count%3A44'))
 
+
+class TestTracks(TestCase):
+  def setUp(self):
+    self.maxDiff = None
+
+  def test_by_album_id(self):
+    self.assertEqual({
+      'start': 0,
+      'page_size': 3,
+      'count': 14,
+      'album_id': 432,
+      'tracks':[
+        {'id': 5417, 'title': '-', 'genre': 'Rock/Pop', 'artist': 'Snow Patrol', 'album': 'Eyes Open', 'duration': 235.373},
+        {'id': 5421, 'title': 'Chasing Cars', 'genre': 'Rock/Pop', 'artist': 'Snow Patrol', 'album': 'Eyes Open', 'duration': 268},
+        {'id': 5416, 'title': 'The Finish Line', 'genre': 'Rock/Pop', 'artist': 'Snow Patrol', 'album': 'Eyes Open', 'duration': 208.133},
+      ]},
+      parse_msg('tracks 0 3 album_id%3A432 id%3A5417 title%3A- genre%3ARock%2FPop artist%3ASnow%20Patrol album%3AEyes%20Open duration%3A235.373 id%3A5421 title%3AChasing%20Cars genre%3ARock%2FPop artist%3ASnow%20Patrol album%3AEyes%20Open duration%3A268 id%3A5416 title%3AThe%20Finish%20Line genre%3ARock%2FPop artist%3ASnow%20Patrol album%3AEyes%20Open duration%3A208.133 count%3A14'))
+

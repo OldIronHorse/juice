@@ -159,7 +159,10 @@ def parse_library(msg):
         try:
           result_list[-1][k] = int(v)
         except ValueError:
-          result_list[-1][k] = v
+          try:
+            result_list[-1][k] = float(v)
+          except ValueError:
+            result_list[-1][k] = v
     else:
       try:
         reply[k] = int(v)
@@ -199,6 +202,7 @@ cmd_parsers = {
   'artists': parse_library,
   'albums': parse_library,
   'years': parse_years,
+  'tracks': parse_library,
 }
 
 def parse_msg(msg):
