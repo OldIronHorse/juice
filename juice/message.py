@@ -136,17 +136,18 @@ def parse_info(msg):
   cmd, subcmd, category, rest = msg.split(' ', 3)
   return info_subparsers[subcmd][category](rest)
 
-def parse_genres(msg):
+def parse_library(msg):
   cmd, start, page_size, rest = msg.split(' ', 3)
   reply = {'start': int(start), 'page_size': int(page_size)}
   fields = rest.split(' ')
   genres = []
-  reply['genres'] = genres
+  singular = cmd[0:-1]
+  reply[cmd] = genres
   for field in fields:
     k, v = unquote(field).split(':', 1)
     if k == 'id':
       genres.append({k: int(v)})
-    elif k == 'genre':
+    elif k == singular:
       genres[-1]['name'] = v
     else:
       try:
@@ -163,7 +164,8 @@ cmd_parsers = {
   'players' : parse_players,
   'syncgroups': parse_syncgroups,
   'info': parse_info,
-  'genres': parse_genres,
+  'genres': parse_library,
+  'artists': parse_library,
 }
 
 def parse_msg(msg):

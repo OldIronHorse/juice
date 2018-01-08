@@ -348,3 +348,34 @@ class TestGenres(TestCase):
         {'id': 4, 'name': 'Alternative & Punk'},
       ]},
       parse_msg('genres 0 5 search%3Aunk count%3A1 id%3A4 genre%3AAlternative%20&%20Punk'))
+
+
+class TestArtists(TestCase):
+  def setUp(self):
+    self.maxDiff = None
+
+  def test_no_filtre(self):
+    self.assertEqual({
+      'count': 7,
+      'start': 0,
+      'page_size': 5,
+      'artists': [
+        {'id': 2, 'name': 'Anastacia'},
+        {'id': 3, 'name': 'Calogero'},
+        {'id': 4, 'name': 'Evanescence'},
+        {'id': 5, 'name': 'Leftfield & Lydon'},
+        {'id': 18, 'name': 'Llorca'},
+      ]},
+      parse_msg('artists 0 5 count:7 id:2 artist:Anastacia id:3 artist:Calogero id:4 artist:Evanescence id:5 artist:Leftfield%20%26%20Lydon id:18 artist:Llorca'))
+
+  def test_genre_filtre(self):
+    self.assertEqual({
+      'genre_id': 7,
+      'count': 2,
+      'start': 0,
+      'page_size': 5,
+      'artists': [
+        {'id': 2, 'name': 'Anastacia'},
+        {'id': 19, 'name': 'Sarah Connor'},
+      ]},
+      parse_msg('artists 0 5 genre_id:7 count:2 id:2 artist:Anastacia id:19 artist:Sarah%20Connor'))
