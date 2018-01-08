@@ -258,3 +258,26 @@ class TestPlayers(TestCase):
         'firmware': 'v1.8.7-999'
       }]},
     parse_msg('players 0 2 count%3A3 playerindex%3A0 playerid%3A00%3A04%3A20%3A17%3A4b%3A3b uuid%3A39c8dbb3bf7d756d013348f4eca8e130 ip%3A192.168.1.75%3A28225 name%3AKitchen seq_no%3A0 model%3Areceiver modelname%3ASqueezebox%20Receiver power%3A1 isplaying%3A0 displaytype%3Anone isplayer%3A1 canpoweroff%3A1 connected%3A1 firmware%3A77 playerindex%3A1 playerid%3A00%3A0f%3A55%3Aa6%3A65%3Ae5 uuid%3A ip%3A192.168.1.82%3A57600 name%3ADining%20Room seq_no%3A0 model%3Asqueezelite modelname%3ASqueezeLite power%3A1 isplaying%3A0 displaytype%3Anone isplayer%3A1 canpoweroff%3A1 connected%3A1 firmware%3Av1.8.7-999'))
+
+  def test_3rd_of_3(self):
+    self.maxDiff = None
+    self.assertEqual({
+      'player_count': 3,
+      'players': [{
+        'index': 2,
+        'id': '00:04:20:23:30:7f',
+        'uuid': 'b0ff501bdcff1d6a18e0965b23844c94',
+        'ip': '192.168.1.69:36472',
+        'name': 'Lounge',
+        'seq_no': 4,
+        'model': 'fab4',
+        'modelname': 'Squeezebox Touch',
+        'power': 1,
+        'isplaying': 0,
+        'displaytype': 'none',
+        'isplayer': 1,
+        'canpoweroff': 1,
+        'connected': 1,
+        'firmware': '7.8.0-r16754'
+      }]},
+    parse_msg('players 2 2 count%3A3 playerindex%3A2 playerid%3A00%3A04%3A20%3A23%3A30%3A7f uuid%3Ab0ff501bdcff1d6a18e0965b23844c94 ip%3A192.168.1.69%3A36472 name%3ALounge seq_no%3A4 model%3Afab4 modelname%3ASqueezebox%20Touch power%3A1 isplaying%3A0 displaytype%3Anone isplayer%3A1 canpoweroff%3A1 connected%3A1 firmware%3A7.8.0-r16754'))
