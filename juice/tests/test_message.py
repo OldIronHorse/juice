@@ -428,3 +428,18 @@ class TestAlbums(TestCase):
         },
       ]},
       parse_msg('albums 102 1 tags%3AlytiqwaS id%3A558 album%3AClassics%20for%20Children year%3A1999 title%3AClassics%20for%20Children disc%3A2 disccount%3A2 compilation%3A1 artist_id%3A3 artist%3AVarious%20Artists count%3A597'))
+
+
+class TestYears(TestCase):
+  def setUp(self):
+    self.maxDiff = None
+
+  def test_years(self):
+    self.assertEqual({
+      'count': 44,
+      'start': 0,
+      'page_size': 2,
+      'years': [2017,2016],
+      },
+      parse_msg('years 0 2 year%3A2017 year%3A2016 count%3A44'))
+
