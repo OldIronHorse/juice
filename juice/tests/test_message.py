@@ -527,3 +527,15 @@ class TestPlay(TestCase):
       }
     },
     parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 play 15'))
+
+
+class TestStop(TestCase):
+  def test_stop(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'action': 'stop'
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 stop'))
+    
