@@ -461,3 +461,31 @@ class TestTracks(TestCase):
       ]},
       parse_msg('tracks 0 3 album_id%3A432 id%3A5417 title%3A- genre%3ARock%2FPop artist%3ASnow%20Patrol album%3AEyes%20Open duration%3A235.373 id%3A5421 title%3AChasing%20Cars genre%3ARock%2FPop artist%3ASnow%20Patrol album%3AEyes%20Open duration%3A268 id%3A5416 title%3AThe%20Finish%20Line genre%3ARock%2FPop artist%3ASnow%20Patrol album%3AEyes%20Open duration%3A208.133 count%3A14'))
 
+
+class TestSearch(TestCase):
+  def setUp(self):
+    self.maxDiff = None
+
+  def test_simple_term(self):
+    self.assertEqual({
+      'count': 393,
+      'start': 0,
+      'page_size': 2,
+      'term': 'al',
+      'contributors_count': 41,
+      'contributors': [
+        {'id':95, 'name': 'Alanis Morissette'},
+        {'id':96, 'name': 'Alex Bailey'},
+      ],
+      'albums_count': 13,
+      'albums': [
+        {'id': 24, 'name': 'No Album'},
+        {'id': 64, 'name': 'All About Eve'},
+      ],
+      'tracks_count': 339,
+      'tracks': [
+        {'id': 56, 'name': 'Totem Pole (alternate take)'},
+        {'id': 63, 'name': 'All of Me'},
+      ]},
+      parse_msg('search 0 2 term%3Aal contributors_count%3A41 contributor_id%3A95 contributor%3AAlanis%20Morissette contributor_id%3A96 contributor%3AAlex%20Bailey albums_count%3A13 album_id%3A24 album%3ANo%20Album album_id%3A64 album%3AAll%20About%20Eve tracks_count%3A339 track_id%3A56 track%3ATotem%20Pole%20(alternate%20take) track_id%3A63 track%3AAll%20of%20Me count%3A393'))
+

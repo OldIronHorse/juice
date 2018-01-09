@@ -3,6 +3,20 @@ from urllib.parse import unquote
 class InvalidMsgException(Exception):
   pass
 
+def try_int(s):
+  try:
+    return int(s)
+  except ValueError:
+    return s
+
+def try_numeric(s):
+  try:
+    return int(s)
+  except ValueError:
+    try:
+      return float(s)
+    except ValueError:
+      return s
 
 def parse_login(msg):
   try:
@@ -61,18 +75,13 @@ def parse_player(msg):
 
 def parse_id(msg):
   player_id, cmd, value = msg.split(' ',2)
+  value = unquote(value)
   reply = {'id': unquote(player_id)}
   if cmd == 'mixer':
-    cmd, value = value.split(' ')
+    cmd, value = value.split(' ', 1)
     if value.startswith('-') or value.startswith('+'):
       cmd += '_change'
-  try:
-    reply[cmd] = int(value)
-  except ValueError:
-    try:
-      reply[cmd] = float(value)
-    except ValueError:
-      reply[cmd] = unquote(value)
+  reply[cmd] = try_numeric(value)
   return reply
 
 def parse_syncgroups(msg):
@@ -156,18 +165,9 @@ def parse_library(msg):
       elif k == 'count':
           reply[k] = int(v)
       else:
-        try:
-          result_list[-1][k] = int(v)
-        except ValueError:
-          try:
-            result_list[-1][k] = float(v)
-          except ValueError:
-            result_list[-1][k] = v
+        result_list[-1][k] = try_numeric(v)
     else:
-      try:
-        reply[k] = int(v)
-      except ValueError:
-        reply[k] = v
+      reply[k] = try_int(v)
   return reply
 
 def parse_years(msg):
@@ -183,12 +183,38 @@ def parse_years(msg):
     if k == 'year':
       years.append(int(v))
     else:
-      try:
-        reply[k] = int(v)
-      except ValueError:
-        reply[k] = v
+      reply[k] = try_int(v)
   return reply
 
+def parse_search(msg):
+  cmd, start, page_size, term, results = msg.split(' ', 4)
+  reply = {
+    'start': int(start), 
+    'page_size': int(page_size),
+    'contributors': [],
+    'albums': [],
+    'tracks': [],
+  }
+  term_tag, term_value = unquote(term).split(':', 1)
+  reply['term'] = term_value
+  for result in results.split(' '):
+    k, v = unquote(result).split(':', 1)
+    if k == 'term':
+      reply[k] = v
+    if k in ['count', 'contributors_count', 'albums_count', 'tracks_count']:
+      reply[k] = int(v)
+    else:
+      try:
+        key_type, key_value = k.split('_')
+      except ValueError:
+        key_type = k
+        key_value = 'name'
+      key_type += 's'
+      if key_value == 'id':
+        reply[key_type].append({'id': int(v)})
+      else:
+        reply[key_type][-1][key_value] = v
+  return reply
 
 cmd_parsers = {
   'login': parse_login,
@@ -203,6 +229,7 @@ cmd_parsers = {
   'albums': parse_library,
   'years': parse_years,
   'tracks': parse_library,
+  'search': parse_search,
 }
 
 def parse_msg(msg):
