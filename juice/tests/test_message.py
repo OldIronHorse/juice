@@ -607,3 +607,41 @@ class TestMode(TestCase):
     },
     parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 mode stop'))
     
+
+class TestTime(TestCase):
+  def test_float(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'time': 12.55
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 time 12.55'))
+    
+  def test_int(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'time': 5
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 time 5'))
+    
+  def test_plus(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'time_change': 5
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 time +5'))
+    
+  def test_minus(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'time_change': -5
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 time -5'))
+    

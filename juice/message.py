@@ -105,6 +105,12 @@ def parse_cmd_pause(reply, cmd, fields):
     pass
   return reply
 
+def parse_cmd_time(reply, cmd, fields):
+  if fields[0].startswith('-') or fields[0].startswith('+'):
+    cmd += '_change'
+  reply[cmd] = try_numeric(fields[0])
+  return reply
+
 player_cmdparsers = {
   'play': parse_cmd_play,
   'stop': parse_cmd_play,
@@ -114,6 +120,7 @@ player_cmdparsers = {
   'signalstrength': parse_cmd_with_value,
   'name': parse_cmd_with_value,
   'connected': parse_cmd_with_value,
+  'time': parse_cmd_time,
 }
 
 def parse_id(msg):
