@@ -131,52 +131,64 @@ class TestPlayer(TestCase):
 class TestPlayerId(TestCase):
   def test_signalstrength(self):
     self.assertEqual({
-      'id': '00:04:20:23:30:7f',
-      'signalstrength': 62,
+      'player': {
+        'id': '00:04:20:23:30:7f',
+        'signalstrength': 62,
+      }
     },
     parse_msg('00%3A04%3A20%3A23%3A30%3A7f signalstrength 62'))
 
   def test_name(self):
     self.assertEqual({
-      'id': '00:04:20:23:30:7f',
-      'name': 'Dining Room',
+      'player': {
+        'id': '00:04:20:23:30:7f',
+        'name': 'Dining Room',
+      }
     },
     parse_msg('00%3A04%3A20%3A23%3A30%3A7f name Dining%20Room'))
 
-
-class TestPlayerId(TestCase):
   def test_connected(self):
     self.assertEqual({
-      'id': '00:04:20:23:30:7f',
-      'connected': 1,
+      'player': {
+        'id': '00:04:20:23:30:7f',
+        'connected': 1,
+      }
     },
     parse_msg('00%3A04%3A20%3A23%3A30%3A7f connected 1'))
 
   def test_sleep(self):
     self.assertEqual({
-      'id': '00:04:20:23:30:7f',
-      'sleep': 100.5,
+      'player': {
+        'id': '00:04:20:23:30:7f',
+        'sleep': 100.5,
+      }
     },
     parse_msg('00%3A04%3A20%3A23%3A30%3A7f sleep 100.5'))
 
   def test_sync_index(self):
     self.assertEqual({
-      'id': '00:04:20:23:30:7f',
-      'sync': 1,
+      'player': {
+        'id': '00:04:20:23:30:7f',
+        'sync': 1,
+      }
     },
     parse_msg('00%3A04%3A20%3A23%3A30%3A7f sync 1'))
 
   def test_sync_id(self):
     self.assertEqual({
-      'id': '00:04:20:23:30:7f',
-      'sync': '00:04:20:23:30:70',
+      'player': {
+        'id': '00:04:20:23:30:7f',
+        'sync': '00:04:20:23:30:70',
+      }
     },
     parse_msg('00%3A04%3A20%3A23%3A30%3A7f sync 00%3A04%3A20%3A23%3A30%3A70'))
 
   def test_sync_none(self):
     self.assertEqual({
-      'id': '00:04:20:23:30:7f',
-      'sync': '-',
+      'player': {
+        'id': '00:04:20:23:30:7f',
+        'sync': '-',
+      }
     },
     parse_msg('00%3A04%3A20%3A23%3A30%3A7f sync -'))
 
@@ -200,22 +212,28 @@ class TestSyncGroups(TestCase):
 class TestMixer(TestCase):
   def test_volume_set(self):
     self.assertEqual({
-      'id': '00:04:20:23:30:7f',
-      'volume': 25,
+      'player': {
+        'id': '00:04:20:23:30:7f',
+        'volume': 25,
+      }
     },
     parse_msg('00%3A04%3A20%3A23%3A30%3A7f mixer volume 25'))
 
   def test_volume_inc(self):
     self.assertEqual({
-      'id': '00:04:20:23:30:7f',
-      'volume_change': 5,
+      'player': {
+        'id': '00:04:20:23:30:7f',
+        'volume_change': 5,
+      }
     },
     parse_msg('00%3A04%3A20%3A23%3A30%3A7f mixer volume +5'))
 
   def test_volume_dec(self):
     self.assertEqual({
-      'id': '00:04:20:23:30:7f',
-      'volume_change': -5,
+      'player': {
+        'id': '00:04:20:23:30:7f',
+        'volume_change': -5,
+      }
     },
     parse_msg('00%3A04%3A20%3A23%3A30%3A7f mixer volume -5'))
 
@@ -489,3 +507,23 @@ class TestSearch(TestCase):
       ]},
       parse_msg('search 0 2 term%3Aal contributors_count%3A41 contributor_id%3A95 contributor%3AAlanis%20Morissette contributor_id%3A96 contributor%3AAlex%20Bailey albums_count%3A13 album_id%3A24 album%3ANo%20Album album_id%3A64 album%3AAll%20About%20Eve tracks_count%3A339 track_id%3A56 track%3ATotem%20Pole%20(alternate%20take) track_id%3A63 track%3AAll%20of%20Me count%3A393'))
 
+
+class TestPlay(TestCase):
+  def test_no_fade(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'action': 'play'
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 play'))
+    
+  def test_with_fade(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'action': 'play',
+        'fade': 15
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 play 15'))

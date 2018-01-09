@@ -73,16 +73,39 @@ def parse_player(msg):
   cmd, subcmd, rest= msg.split(' ',2)
   return player_subparsers[subcmd](cmd, subcmd, rest)
 
-def parse_id(msg):
-  player_id, cmd, value = msg.split(' ',2)
-  value = unquote(value)
-  reply = {'id': unquote(player_id)}
+def parse_cmd_play(reply, cmd, fields):
+  reply['action'] = cmd
+  if fields:
+    reply['fade'] = try_numeric(fields[0])
+  return reply
+
+def parse_cmd_with_value(reply, cmd, fields):
+  reply[cmd] = try_numeric(unquote(fields[0]))
+  return reply
+
+def parse_cmd_default(reply, cmd, fields):
+  value = unquote(fields[0])
   if cmd == 'mixer':
     cmd, value = value.split(' ', 1)
     if value.startswith('-') or value.startswith('+'):
       cmd += '_change'
   reply[cmd] = try_numeric(value)
   return reply
+
+
+player_cmdparsers = {
+  'play': parse_cmd_play,
+  'sync': parse_cmd_with_value,
+  'sleep': parse_cmd_with_value,
+  'signalstrength': parse_cmd_with_value,
+  'name': parse_cmd_with_value,
+  'connected': parse_cmd_with_value,
+}
+
+def parse_id(msg):
+  fields = msg.split(' ',2)
+  cmd = fields[1]
+  return {'player': player_cmdparsers.get(cmd, parse_cmd_default)({'id': unquote(fields[0])}, cmd, fields[2:])}
 
 def parse_syncgroups(msg):
   fields = msg.split(' ')
