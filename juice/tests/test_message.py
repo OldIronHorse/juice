@@ -579,3 +579,31 @@ class TestPause(TestCase):
     parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 pause 0 15'))
 
 
+class TestMode(TestCase):
+  def test_play(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'mode': 'play'
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 mode play'))
+    
+  def test_pause(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'mode': 'pause'
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 mode pause'))
+    
+  def test_stop(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'mode': 'stop'
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 mode stop'))
+    
