@@ -645,3 +645,77 @@ class TestTime(TestCase):
     },
     parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 time -5'))
     
+
+class TestPlayerCurrent(TestCase):
+  def test_genre(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'genre': 'Acoustic',
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 genre Acoustic'))
+    
+  def test_artist(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'artist': 'Dua Lipa',
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 artist Dua%20Lipa'))
+    
+  def test_album(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'album': 'Greatest Hits',
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 album Greatest%20Hits'))
+    
+  def test_title(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'title': 'Voulez Vous',
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 title Voulez%20Vous'))
+    
+  def test_duration(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'duration': 103.2,
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 duration 103.2'))
+    
+  def test_remote_true(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'remote': True,
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 remote 1'))
+    
+  def test_remote_fase(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'remote': False,
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 remote 0'))
+    
+  def test_current_title(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'current_title': '1-Voulez Vous (ABBA)',
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 current_title 1-Voulez%20Vous%20(ABBA)'))
+    
