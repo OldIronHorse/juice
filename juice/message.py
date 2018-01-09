@@ -86,16 +86,29 @@ def parse_cmd_with_value(reply, cmd, fields):
 def parse_cmd_default(reply, cmd, fields):
   value = unquote(fields[0])
   if cmd == 'mixer':
-    cmd, value = value.split(' ', 1)
+    cmd = fields[0]
+    value = fields[1]
     if value.startswith('-') or value.startswith('+'):
       cmd += '_change'
   reply[cmd] = try_numeric(value)
   return reply
 
+def parse_cmd_pause(reply, cmd, fields):
+  print(reply, cmd, fields)
+  try:
+    reply['action'] = ['unpause','pause'][int(fields[0])]
+  except IndexError:
+    reply['action'] = 'toggle_pause'
+  try:
+    reply['fade'] = int(fields[1])
+  except IndexError:
+    pass
+  return reply
 
 player_cmdparsers = {
   'play': parse_cmd_play,
   'stop': parse_cmd_play,
+  'pause': parse_cmd_pause,
   'sync': parse_cmd_with_value,
   'sleep': parse_cmd_with_value,
   'signalstrength': parse_cmd_with_value,
@@ -104,7 +117,7 @@ player_cmdparsers = {
 }
 
 def parse_id(msg):
-  fields = msg.split(' ',2)
+  fields = msg.split(' ')
   cmd = fields[1]
   return {'player': player_cmdparsers.get(cmd, parse_cmd_default)({'id': unquote(fields[0])}, cmd, fields[2:])}
 

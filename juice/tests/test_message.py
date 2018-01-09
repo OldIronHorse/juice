@@ -539,3 +539,43 @@ class TestStop(TestCase):
     },
     parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 stop'))
     
+
+class TestPause(TestCase):
+  def test_toggle(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'action': 'toggle_pause'
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 pause'))
+    
+  def test_force_pause(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'action': 'pause'
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 pause 1'))
+    
+  def test_force_unpause(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'action': 'unpause'
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 pause 0'))
+    
+  def test_force_unpause_with_fade(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'action': 'unpause',
+        'fade': 15
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 pause 0 15'))
+
+
