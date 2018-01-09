@@ -95,6 +95,7 @@ def parse_cmd_default(reply, cmd, fields):
 
 player_cmdparsers = {
   'play': parse_cmd_play,
+  'stop': parse_cmd_play,
   'sync': parse_cmd_with_value,
   'sleep': parse_cmd_with_value,
   'signalstrength': parse_cmd_with_value,
