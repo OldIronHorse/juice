@@ -111,6 +111,22 @@ def parse_cmd_time(reply, cmd, fields):
   reply[cmd] = try_numeric(fields[0])
   return reply
 
+def parse_cmd_playlist(reply, cmd, fields):
+  playlist = {'action': fields[0]}
+  if fields[0] == 'delete':
+    playlist['index'] = int(fields[1])
+  elif fields[0] == 'move':
+    playlist['from'] = int(fields[1])
+    playlist['to'] = int(fields[2])
+  else:
+    playlist['item'] = unquote(fields[1])
+    try:
+      playlist['title'] = unquote(fields[2])
+    except IndexError:
+      pass
+  reply[cmd] = playlist
+  return reply
+
 player_cmdparsers = {
   'play': parse_cmd_play,
   'stop': parse_cmd_play,
@@ -121,6 +137,7 @@ player_cmdparsers = {
   'name': parse_cmd_with_value,
   'connected': parse_cmd_with_value,
   'time': parse_cmd_time,
+  'playlist': parse_cmd_playlist,
 }
 
 def parse_id(msg):

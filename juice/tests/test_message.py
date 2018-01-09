@@ -719,3 +719,117 @@ class TestPlayerCurrent(TestCase):
     },
     parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 current_title 1-Voulez%20Vous%20(ABBA)'))
     
+
+class TestPlaylist(TestCase):
+  def test_play(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'playlist': {
+          'action': 'play',
+          'item': '/music/abba/01-voulez vous.mp3'
+        },
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 playlist play /music/abba/01-voulez%20vous.mp3'))
+    
+  def test_play_with_title(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'playlist': {
+          'action': 'play',
+          'item': '/music/abba/01-voulez vous.mp3',
+          'title': 'Voulez Vous!',
+        },
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 playlist play /music/abba/01-voulez%20vous.mp3 Voulez%20Vous!'))
+    
+  def test_add(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'playlist': {
+          'action': 'add',
+          'item': '/music/abba/01-voulez vous.mp3'
+        },
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 playlist add /music/abba/01-voulez%20vous.mp3'))
+    
+  def test_add_with_title(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'playlist': {
+          'action': 'add',
+          'item': '/music/abba/01-voulez vous.mp3',
+          'title': 'Voulez Vous!',
+        },
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 playlist add /music/abba/01-voulez%20vous.mp3 Voulez%20Vous!'))
+    
+  def test_insert(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'playlist': {
+          'action': 'insert',
+          'item': '/music/abba/01-voulez vous.mp3'
+        },
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 playlist insert /music/abba/01-voulez%20vous.mp3'))
+    
+  def test_insert_with_title(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'playlist': {
+          'action': 'insert',
+          'item': '/music/abba/01-voulez vous.mp3',
+          'title': 'Voulez Vous!',
+        },
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 playlist insert /music/abba/01-voulez%20vous.mp3 Voulez%20Vous!'))
+    
+  def test_deleteitem(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'playlist': {
+          'action': 'deleteitem',
+          'item': '/music/abba/01-voulez vous.mp3'
+        },
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 playlist deleteitem /music/abba/01-voulez%20vous.mp3'))
+    
+  def test_delete(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'playlist': {
+          'action': 'delete',
+          'index': 4,
+        },
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 playlist delete 4'))
+    
+  def test_move(self):
+    self.assertEqual({
+      'player': {
+        'id': '00:0f:55:a6:65:e5',
+        'playlist': {
+          'action': 'move',
+          'from': 4,
+          'to': 6,
+        },
+      }
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 playlist move 4 6'))
+    
