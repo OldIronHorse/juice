@@ -833,3 +833,61 @@ class TestPlaylist(TestCase):
     },
     parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 playlist move 4 6'))
     
+
+class TestCompound(TestCase):
+  def setUp(self):
+    self.maxDiff = None
+
+  def test_serverstatus(self):
+    self.assertEqual({
+      'serverstatus': {
+        'start': 0,
+        'page_size': 2,
+        'lastscan': 1514208396,
+        'version': '7.9.0',
+        'uuid': '2a5700ff-aec8-4676-b524-f69f925fcd6b',
+        'totals': {
+          'artists': 1490,
+          'albums': 597,
+          'genres': 52,
+          'songs': 8578,
+          'duration': 2036617.432,
+        },
+        'player count': 3,
+        'players': [{
+            'index': 0,
+            'id': '00:0f:55:a6:65:e5',
+            'uuid': '',
+            'ip': '192.168.1.82:55016',
+            'name': 'Dining Room',
+            'seq_no': 0,
+            'model': 'squeezelite',
+            'modelname': 'SqueezeLite',
+            'power': 1,
+            'isplaying': 1,
+            'displaytype': 'none',
+            'isplayer': 1,
+            'canpoweroff': 1,
+            'connected': 1,
+            'firmware': 'v1.8.7-999',
+          },{
+            'index': 1,
+            'id': '00:04:20:23:30:7f',
+            'uuid': 'b0ff501bdcff1d6a18e0965b23844c94',
+            'ip': '192.168.1.69:46707',
+            'name': 'Lounge',
+            'seq_no': 6,
+            'model': 'fab4',
+            'modelname': 'Squeezebox Touch',
+            'power': 1,
+            'isplaying': 0,
+            'displaytype': 'none',
+            'isplayer': 1,
+            'canpoweroff': 1,
+            'connected': 1,
+            'firmware': '7.8.0-r16754',
+        }],
+        'sn player count': 0, 
+        'other player count': 0,
+      }},
+      parse_msg('serverstatus 0 2 lastscan%3A1514208396 version%3A7.9.0 uuid%3A2a5700ff-aec8-4676-b524-f69f925fcd6b info%20total%20albums%3A597 info%20total%20artists%3A1490 info%20total%20genres%3A52 info%20total%20songs%3A8578 info%20total%20duration%3A2036617.432 player%20count%3A3 playerindex%3A0 playerid%3A00%3A0f%3A55%3Aa6%3A65%3Ae5 uuid%3A ip%3A192.168.1.82%3A55016 name%3ADining%20Room seq_no%3A0 model%3Asqueezelite modelname%3ASqueezeLite power%3A1 isplaying%3A1 displaytype%3Anone isplayer%3A1 canpoweroff%3A1 connected%3A1 firmware%3Av1.8.7-999 playerindex%3A1 playerid%3A00%3A04%3A20%3A23%3A30%3A7f uuid%3Ab0ff501bdcff1d6a18e0965b23844c94 ip%3A192.168.1.69%3A46707 name%3ALounge seq_no%3A6 model%3Afab4 modelname%3ASqueezebox%20Touch power%3A1 isplaying%3A0 displaytype%3Anone isplayer%3A1 canpoweroff%3A1 connected%3A1 firmware%3A7.8.0-r16754 sn%20player%20count%3A0 other%20player%20count%3A0'))

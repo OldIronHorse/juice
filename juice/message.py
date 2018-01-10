@@ -1,4 +1,5 @@
 from urllib.parse import unquote
+import pprint
 
 class InvalidMsgException(Exception):
   pass
@@ -277,6 +278,43 @@ def parse_search(msg):
         reply[key_type][-1][key_value] = v
   return reply
 
+def parse_serverstatus(msg):
+  cmd, start, page_size, fields = msg.split(' ', 3)
+  reply = {
+    'start': int(start), 
+    'page_size': int (page_size),
+    'totals': {},
+    'players': [],
+  }
+  player = None
+  for field in fields.split(' '):
+    k, v = unquote(field).split(':', 1)
+    if player and k in ['playerid', 'uuid', 'ip', 'name',
+             'seq_no', 'model', 'modelname', 'power', 'isplaying',
+             'displaytype', 'isplayer', 'canpoweroff', 'connected',
+             'firmware']:
+      if k == 'playerid':
+        player['id'] = v
+      else:
+        player[k] = try_numeric(v)
+    elif k == 'playerindex':
+      if player:
+        reply['players'].append(player)
+      player = {'index': int(v)}
+    else:
+      if player:
+        reply['players'].append(player)
+        player = None
+      try:
+        i, t, key = k.split(' ', 2)
+        if i == 'info' and t == 'total':
+          reply['totals'][key] = try_numeric(v)
+        else:
+          reply[k] = try_numeric(v)
+      except ValueError:
+        reply[k] = try_numeric(v)
+  return {'serverstatus': reply}
+
 cmd_parsers = {
   'login': parse_login,
   'listen': parse_listen,
@@ -291,6 +329,7 @@ cmd_parsers = {
   'years': parse_years,
   'tracks': parse_library,
   'search': parse_search,
+  'serverstatus': parse_serverstatus,
 }
 
 def parse_msg(msg):
