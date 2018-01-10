@@ -891,3 +891,39 @@ class TestCompound(TestCase):
         'other player count': 0,
       }},
       parse_msg('serverstatus 0 2 lastscan%3A1514208396 version%3A7.9.0 uuid%3A2a5700ff-aec8-4676-b524-f69f925fcd6b info%20total%20albums%3A597 info%20total%20artists%3A1490 info%20total%20genres%3A52 info%20total%20songs%3A8578 info%20total%20duration%3A2036617.432 player%20count%3A3 playerindex%3A0 playerid%3A00%3A0f%3A55%3Aa6%3A65%3Ae5 uuid%3A ip%3A192.168.1.82%3A55016 name%3ADining%20Room seq_no%3A0 model%3Asqueezelite modelname%3ASqueezeLite power%3A1 isplaying%3A1 displaytype%3Anone isplayer%3A1 canpoweroff%3A1 connected%3A1 firmware%3Av1.8.7-999 playerindex%3A1 playerid%3A00%3A04%3A20%3A23%3A30%3A7f uuid%3Ab0ff501bdcff1d6a18e0965b23844c94 ip%3A192.168.1.69%3A46707 name%3ALounge seq_no%3A6 model%3Afab4 modelname%3ASqueezebox%20Touch power%3A1 isplaying%3A0 displaytype%3Anone isplayer%3A1 canpoweroff%3A1 connected%3A1 firmware%3A7.8.0-r16754 sn%20player%20count%3A0 other%20player%20count%3A0'))
+
+  def test_player_status(self):
+    self.assertEqual({
+      'player': {
+        'cmd': 'status',
+        'start': '-',
+        'page_size': 2,
+        'tags': '',
+        'subscribe': 0,
+        'id': '00:0f:55:a6:65:e5',
+        'name': 'Dining Room',
+        'connected': 1,
+        'ip': '192.168.1.82:57702',
+        'power': 1,
+        'signalstrength': 0,
+        'mode': 'play',
+        'time': 19.4145948696136,
+        'rate': 1,
+        'duration': 228.106,
+        'can_seek': 1,
+        'volume':32,
+        'playlist repeat': 0,
+        'playlist shuffle': 0,
+        'playlist mode': 'off',
+        'seq_no': 0,
+        'playlist_cur_index': 8,
+        'playlist_timestamp': 1515551291.82482,
+        'playlist_tracks': 11,
+        'digital_volume_control': 1,
+        'playlist': [
+          {'index': 8, 'id': 8691, 'title': 'Cryin\' In Your Beer'},
+          {'index': 9, 'id': 8692, 'title': 'Boy On A Bike'},
+        ],
+      },
+    },
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 status - 2 tags%3A subscribe%3A0 player_name%3ADining%20Room player_connected%3A1 player_ip%3A192.168.1.82%3A57702 power%3A1 signalstrength%3A0 mode%3Aplay time%3A19.4145948696136 rate%3A1 duration%3A228.106 can_seek%3A1 mixer%20volume%3A32 playlist%20repeat%3A0 playlist%20shuffle%3A0 playlist%20mode%3Aoff seq_no%3A0 playlist_cur_index%3A8 playlist_timestamp%3A1515551291.82482 playlist_tracks%3A11 digital_volume_control%3A1 playlist%20index%3A8 id%3A8691 title%3ACryin\'%20In%20Your%20Beer playlist%20index%3A9 id%3A8692 title%3ABoy%20On%20A%20Bike'))

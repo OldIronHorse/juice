@@ -128,6 +128,32 @@ def parse_cmd_playlist(reply, cmd, fields):
   reply[cmd] = playlist
   return reply
 
+def parse_cmd_status(reply, cmd, fields):
+  reply['cmd'] = cmd
+  reply['start'] = try_int(fields[0])
+  reply['page_size'] = int(fields[1])
+  reply['playlist'] = []
+  track = None;
+  for field in fields[2:]:
+    k,v = unquote(field).split(':', 1)
+    if k.startswith('player_'):
+      reply[k[7:]] = try_numeric(v)
+    elif k == 'mixer volume':
+      k = 'volume'
+      reply[k] = int(v)
+    elif k == 'playlist index':
+      track = {'index': int(v)}
+    elif k == 'id':
+      track['id'] = int(v)
+    elif k == 'title':
+      track['title'] = v
+      reply['playlist'].append(track)
+      track = None
+    else:
+      reply[k] = try_numeric(v)
+  print(reply)
+  return reply
+
 player_cmdparsers = {
   'play': parse_cmd_play,
   'stop': parse_cmd_play,
@@ -139,6 +165,7 @@ player_cmdparsers = {
   'connected': parse_cmd_with_value,
   'time': parse_cmd_time,
   'playlist': parse_cmd_playlist,
+  'status': parse_cmd_status,
 }
 
 def parse_id(msg):
