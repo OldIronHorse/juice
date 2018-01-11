@@ -32,3 +32,27 @@ def player_by_id(player_id, field, new_value='?'):
 
 def syncgroups():
   return 'syncgroups ?\n'
+
+def players(start=0, page_size=10):
+  return 'players {} {}\n'.format(start, page_size)
+
+def total(category):
+  return 'info total {} ?\n'.format(category)
+
+def category_query(category, start, page_size, filtres):
+  msg = '{} {} {} tags:lytiqwaS'.format(category, start, page_size)
+  for k in sorted(filtres.keys()):
+    msg += ' {}:{}'.format(k, filtres[k])
+  return msg + '\n'
+
+def genres(start=0, page_size=100, **kwargs):
+  return category_query('genres', start, page_size, kwargs)
+
+def artists(start=0, page_size=100, **kwargs):
+  return category_query('artists', start, page_size, kwargs)
+
+def albums(start=0, page_size=100, **kwargs):
+  return category_query('albums', start, page_size, kwargs)
+
+def years(start=0, page_size=100, **kwargs):
+  return category_query('years', start, page_size, kwargs)
