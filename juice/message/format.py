@@ -24,8 +24,8 @@ def player(field, index=None):
     return 'player {} {} ?\n'.format(field, index)
 
 def player_by_id(player_id, field, new_value='?'):
-  if field == 'volume':
-    field = 'mixer volume'
+  if field in ['volume','muting']:
+    field = 'mixer ' + field
   elif new_value != '?':
     new_value = quote(new_value)
   return '{} {} {}\n'.format(player_id, field, new_value)

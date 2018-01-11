@@ -49,6 +49,7 @@ class TestPlayer(TestCase):
     self.assertEqual('player id 1 ?\n',
       msg_format.player('id', 1))
 
+
 class TestPlayerById(TestCase):
   def test_signalstrength(self):
     self.assertEqual('00:12:34:56:78:90 signalstrength ?\n',
@@ -62,10 +63,12 @@ class TestPlayerById(TestCase):
     self.assertEqual('00:12:34:56:78:90 name Some%20New%20Name\n',
       msg_format.player_by_id('00:12:34:56:78:90', 'name', 'Some New Name'))
 
+
 class TestSyncgroups(TestCase):
   def test_get(self):
     self.assertEqual('syncgroups ?\n',
       msg_format.syncgroups())
+
 
 class TestPlayerVolume(TestCase):
   def test_get(self):
@@ -83,4 +86,19 @@ class TestPlayerVolume(TestCase):
   def test_decrement(self):
     self.assertEqual('00:12:34:56:78:90 mixer volume -5\n',
       msg_format.player_by_id('00:12:34:56:78:90', 'volume', -5))
+
+
+class TestPlayerMuting(TestCase):
+  def test_get(self):
+    self.assertEqual('00:12:34:56:78:90 mixer muting ?\n',
+      msg_format.player_by_id('00:12:34:56:78:90', 'muting'))
+
+  def test_set(self):
+    self.assertEqual('00:12:34:56:78:90 mixer muting 75\n',
+      msg_format.player_by_id('00:12:34:56:78:90', 'muting', 75))
+
+  def test_toggle(self):
+    self.assertEqual('00:12:34:56:78:90 mixer muting toggle\n',
+      msg_format.player_by_id('00:12:34:56:78:90', 'muting', 'toggle'))
+
 
