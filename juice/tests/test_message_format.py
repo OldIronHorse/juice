@@ -39,3 +39,48 @@ class TestSubscribe(TestCase):
     self.assertEqual('subscribe mixer,pause\n',
       msg_format.subscribe(['mixer', 'pause']))
 
+
+class TestPlayer(TestCase):
+  def test_count(self):
+    self.assertEqual('player count ?\n',
+      msg_format.player('count'))
+
+  def test_id(self):
+    self.assertEqual('player id 1 ?\n',
+      msg_format.player('id', 1))
+
+class TestPlayerById(TestCase):
+  def test_signalstrength(self):
+    self.assertEqual('00:12:34:56:78:90 signalstrength ?\n',
+      msg_format.player_by_id('00:12:34:56:78:90', 'signalstrength'))
+
+  def test_name_get(self):
+    self.assertEqual('00:12:34:56:78:90 name ?\n',
+      msg_format.player_by_id('00:12:34:56:78:90', 'name'))
+
+  def test_name_set(self):
+    self.assertEqual('00:12:34:56:78:90 name Some%20New%20Name\n',
+      msg_format.player_by_id('00:12:34:56:78:90', 'name', 'Some New Name'))
+
+class TestSyncgroups(TestCase):
+  def test_get(self):
+    self.assertEqual('syncgroups ?\n',
+      msg_format.syncgroups())
+
+class TestPlayerVolume(TestCase):
+  def test_get(self):
+    self.assertEqual('00:12:34:56:78:90 mixer volume ?\n',
+      msg_format.player_by_id('00:12:34:56:78:90', 'volume'))
+
+  def test_set(self):
+    self.assertEqual('00:12:34:56:78:90 mixer volume 75\n',
+      msg_format.player_by_id('00:12:34:56:78:90', 'volume', 75))
+
+  def test_increment(self):
+    self.assertEqual('00:12:34:56:78:90 mixer volume +5\n',
+      msg_format.player_by_id('00:12:34:56:78:90', 'volume', '+5'))
+
+  def test_decrement(self):
+    self.assertEqual('00:12:34:56:78:90 mixer volume -5\n',
+      msg_format.player_by_id('00:12:34:56:78:90', 'volume', -5))
+
