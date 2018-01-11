@@ -25,3 +25,17 @@ class TestListen(TestCase):
     self.assertEqual('listen 0\n',
       msg_format.listen(False))
 
+
+class TestSubscribe(TestCase):
+  def test_empty(self):
+    self.assertEqual('subscribe\n',
+      msg_format.subscribe())
+
+  def test_single(self):
+    self.assertEqual('subscribe mixer\n',
+      msg_format.subscribe(['mixer']))
+
+  def test_multiple(self):
+    self.assertEqual('subscribe mixer,pause\n',
+      msg_format.subscribe(['mixer', 'pause']))
+
