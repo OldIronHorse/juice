@@ -1,6 +1,8 @@
 from collections import namedtuple
 from telnetlib import Telnet
 from urllib.parse import unquote
+from juice.message.parse import parse_msg
+from threading import Thread
 
 PlayerMessage = namedtuple('PlayerMessage',
                            'player_id name msg_type start per_page tags')
@@ -20,3 +22,11 @@ def read_loop(server, onMessage):
     fields = [unquote(field) for field in msg]
     onMessage(PlayerMessage(fields[0], fields[1], fields[2], fields[3], fields[4],
               {t: v for [t,v] in [field.split(':',1) for field in fields[5:]]}))
+
+def read_worker(server, onMsg):
+  while(True):
+    msg = parse_msg(server.read_until(b'\n').decode('ascii'))
+    onMsg(msg)
+
+def loop_start(server, onMsg):
+  Thread(target=read_worker, args=(server, onMsg)).start()

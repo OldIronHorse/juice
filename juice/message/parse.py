@@ -1,5 +1,4 @@
 from urllib.parse import unquote
-import pprint
 
 class InvalidMsgException(Exception):
   pass
@@ -95,7 +94,6 @@ def parse_cmd_default(reply, cmd, fields):
   return reply
 
 def parse_cmd_pause(reply, cmd, fields):
-  print(reply, cmd, fields)
   try:
     reply['action'] = ['unpause','pause'][int(fields[0])]
   except IndexError:
@@ -142,16 +140,17 @@ def parse_cmd_status(reply, cmd, fields):
       k = 'volume'
       reply[k] = int(v)
     elif k == 'playlist index':
+      if track:
+        reply['playlist'].append(track)
       track = {'index': int(v)}
     elif k == 'id':
       track['id'] = int(v)
-    elif k == 'title':
-      track['title'] = v
-      reply['playlist'].append(track)
-      track = None
+    elif k in ['id', 'title', 'album', 'artist']:
+      track[k] = v
     else:
       reply[k] = try_numeric(v)
-  print(reply)
+  if track:
+    reply['playlist'].append(track)
   return reply
 
 player_cmdparsers = {

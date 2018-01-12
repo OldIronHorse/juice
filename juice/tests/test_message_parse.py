@@ -951,9 +951,11 @@ class TestCompound(TestCase):
         'playlist_tracks': 11,
         'digital_volume_control': 1,
         'playlist': [
-          {'index': 8, 'id': 8691, 'title': 'Cryin\' In Your Beer'},
-          {'index': 9, 'id': 8692, 'title': 'Boy On A Bike'},
+          {'index': 8, 'id': 8691, 'title': 'Cryin\' In Your Beer',
+            'album': 'Blur: The Best Of', 'artist': 'Blur'},
+          {'index': 9, 'id': 8692, 'title': 'Boy On A Bike',
+            'album': 'Oasis: The Best Of', 'artist': 'Oasis'},
         ],
       },
     },
-    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 status - 2 tags%3A subscribe%3A0 player_name%3ADining%20Room player_connected%3A1 player_ip%3A192.168.1.82%3A57702 power%3A1 signalstrength%3A0 mode%3Aplay time%3A19.4145948696136 rate%3A1 duration%3A228.106 can_seek%3A1 mixer%20volume%3A32 playlist%20repeat%3A0 playlist%20shuffle%3A0 playlist%20mode%3Aoff seq_no%3A0 playlist_cur_index%3A8 playlist_timestamp%3A1515551291.82482 playlist_tracks%3A11 digital_volume_control%3A1 playlist%20index%3A8 id%3A8691 title%3ACryin\'%20In%20Your%20Beer playlist%20index%3A9 id%3A8692 title%3ABoy%20On%20A%20Bike'))
+    parse_msg('00%3A0f%3A55%3Aa6%3A65%3Ae5 status - 2 tags%3A subscribe%3A0 player_name%3ADining%20Room player_connected%3A1 player_ip%3A192.168.1.82%3A57702 power%3A1 signalstrength%3A0 mode%3Aplay time%3A19.4145948696136 rate%3A1 duration%3A228.106 can_seek%3A1 mixer%20volume%3A32 playlist%20repeat%3A0 playlist%20shuffle%3A0 playlist%20mode%3Aoff seq_no%3A0 playlist_cur_index%3A8 playlist_timestamp%3A1515551291.82482 playlist_tracks%3A11 digital_volume_control%3A1 playlist%20index%3A8 id%3A8691 title%3ACryin\'%20In%20Your%20Beer artist%3ABlur album%3ABlur%3A%20The%20Best%20Of playlist%20index%3A9 id%3A8692 title%3ABoy%20On%20A%20Bike artist%3AOasis album%3AOasis%3A%20The%20Best%20Of'))
