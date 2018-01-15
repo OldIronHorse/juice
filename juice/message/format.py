@@ -57,6 +57,9 @@ def albums(start=0, page_size=100, **kwargs):
 def years(start=0, page_size=100, **kwargs):
   return category_query('years', start, page_size, kwargs)
 
+def tracks(start=0, page_size=100, **kwargs):
+  return category_query('tracks', start, page_size, kwargs)
+
 def player_status(player_id, start='-', page_size=100, subscribe=None):
   msg = '{} status {} {} tags:al'.format(player_id, start, page_size)
   if subscribe is None:

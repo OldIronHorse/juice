@@ -9,4 +9,4 @@ from .playlists import get_playing_title, get_playing_album, \
 
 from .common import connect, listen, subscribe_status, read_loop, loop_start
 
-from .library import Artist, get_artists
+from .library import Artist, get_artists, get_albums, get_tracks

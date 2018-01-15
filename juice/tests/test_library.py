@@ -4,12 +4,14 @@ from telnetlib import Telnet
 
 from juice import Artist, get_artists
 
-class TestGetArtists(TestCase):
+class TestWithCLI(TestCase):
   def setUp(self):
     self.tn = Telnet();
     self.tn.write = MagicMock('write')
     self.tn.read_until = MagicMock('read_until')
 
+
+class TestGetArtists(TestWithCLI):
   def test_all_artists(self):
     self.maxDiff=None
     self.tn.read_until.return_value = \
@@ -27,3 +29,5 @@ class TestGetArtists(TestCase):
                      get_artists(self.tn))
     self.tn.read_until.assert_called_once_with(b'\n')
     self.tn.write.assert_called_once_with(b'artists 0 9999\n')
+
+

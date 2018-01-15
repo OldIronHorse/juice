@@ -1,19 +1,31 @@
 from collections import namedtuple
 from urllib.parse import unquote
+from .message.parse import parse_msg
+from .message import format as msg_format
 
 Artist = namedtuple('Artist','name id')
 
-def get_artists(server):
-  server.write(b'artists 0 9999\n')
-  response = server.read_until(b'\n').decode('ascii').split()
-  response = [unquote(tag).split(':',1) for tag in response[3:]]
-  artists = []
-  artist = {}
-  for tag, value in response:
-    if tag in ['id','artist']:
-      if tag in artist:
-        artists.append(Artist(artist['artist'],int(artist['id'])))
-        artist = {}
-      artist[tag] = value
-  artists.append(Artist(artist['artist'],int(artist['id'])))
+def get_artists(server, **kwargs):
+  request = msg_format.artists(**kwargs)
+  server.write(request.encode('ascii'))
+  reply = server.read_until(b'\n').decode('ascii')
+  artists = parse_msg(reply)['artists']
   return artists
+
+def get_albums(server, **kwargs):
+  request = msg_format.albums(**kwargs)
+  print(request)
+  server.write(request.encode('ascii'))
+  reply = server.read_until(b'\n').decode('ascii')
+  print(reply)
+  albums = parse_msg(reply)['albums']
+  return albums
+
+def get_tracks(server, **kwargs):
+  request = msg_format.tracks(**kwargs)
+  print(request)
+  server.write(request.encode('ascii'))
+  reply = server.read_until(b'\n').decode('ascii')
+  print(reply)
+  tracks = parse_msg(reply)['tracks']
+  return tracks
