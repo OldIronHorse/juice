@@ -1,5 +1,10 @@
 from collections import namedtuple
 from urllib.parse import unquote
+import juice.message.format as msg_format
+from juice.message.parse import parse_msg
+
+#TODO: remove named tuples
+#TODO: refactor to use msg_format and parse_msg
 
 Player = namedtuple('Player','index name id')
 
@@ -55,4 +60,12 @@ def get_player_volume(server, id):
 
 def set_player_volume(server, id, vol):
   server.write('{} mixer volume {}\n'.format(id, vol).encode('ascii'))
+  server.read_until(b'\n')
+
+def next_track(server, player_id):
+  server.write(msg_format.next_track(player_id).encode('ascii'))
+  server.read_until(b'\n')
+
+def previous_track(server, player_id):
+  server.write(msg_format.previous_track(player_id).encode('ascii'))
   server.read_until(b'\n')

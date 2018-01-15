@@ -210,3 +210,13 @@ class TestPlayerStatus(TestCase):
   def test_subscribe_defaults(self):
     self.assertEqual('00:12:34:56:78:90 status - 100 tags:al subscribe:0\n',
       msg_format.player_status('00:12:34:56:78:90', subscribe=0))
+
+
+class TestPlayerCommands(TestCase):
+  def test_next_track(self):
+    self.assertEqual('00:12:34:56:78:90 playlist index %2B1\n',
+      msg_format.next_track('00:12:34:56:78:90'))
+
+  def test_previous_track(self):
+    self.assertEqual('00:12:34:56:78:90 playlist index -1\n',
+      msg_format.previous_track('00:12:34:56:78:90'))

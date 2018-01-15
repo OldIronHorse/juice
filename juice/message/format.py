@@ -67,3 +67,9 @@ def player_status(player_id, start='-', page_size=100, subscribe=None):
   else:
     msg += ' subscribe:{}\n'.format(subscribe)
   return msg
+
+def next_track(player_id):
+  return player_by_id(player_id, 'playlist index', '+1')
+
+def previous_track(player_id):
+  return player_by_id(player_id, 'playlist index', '-1')
