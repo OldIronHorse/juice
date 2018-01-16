@@ -3,7 +3,7 @@ from unittest.mock import MagicMock,patch
 
 from telnetlib import Telnet
 
-from juice import Player, get_players, get_player_name, get_player_id, \
+from juice import get_players, get_player_name, get_player_id, \
   play, pause, state, get_player_volume, set_player_volume
 
 class TestWithServer(TestCase):
@@ -92,9 +92,12 @@ class TestGetPlayers(TestCase):
          patch('juice.players.get_player_id',
                side_effect=['00:12:34:56:78:90','01:12:34:56:78:90',
                             '02:12:34:56:78:90']):
-      self.assertEqual([Player(0,'Lounge','00:12:34:56:78:90'),
-                       Player(1,'Kitchen','01:12:34:56:78:90'),
-                       Player(2,'Dining Room','02:12:34:56:78:90')],
+      self.assertEqual([{'index': 0, 'name': 'Lounge',
+                         'id': '00:12:34:56:78:90'},
+                        {'index': 1, 'name': 'Kitchen', 
+                         'id': '01:12:34:56:78:90'},
+                        {'index': 2, 'name': 'Dining Room', 
+                         'id': '02:12:34:56:78:90'}],
                       get_players(None))
 
     

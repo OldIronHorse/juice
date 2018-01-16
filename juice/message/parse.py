@@ -359,6 +359,7 @@ cmd_parsers = {
 }
 
 def parse_msg(msg):
+  msg = msg.strip()
   cmd = msg.split(' ', 1)[0]
   try:
     return cmd_parsers[cmd](msg)

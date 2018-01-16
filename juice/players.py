@@ -1,12 +1,9 @@
-from collections import namedtuple
 from urllib.parse import unquote
 import juice.message.format as msg_format
 from juice.message.parse import parse_msg
 
 #TODO: remove named tuples
 #TODO: refactor to use msg_format and parse_msg
-
-Player = namedtuple('Player','index name id')
 
 def indexed_query(server,obj,prop,index):
   server.write('{} {} {} ?\n'.format(obj,prop,index).encode('ascii'))
@@ -36,7 +33,9 @@ def get_player_id(server,index):
 def get_players(server):
   players = []
   for i in range(0,get_player_count(server)):
-    players.append(Player(i,get_player_name(server,i),get_player_id(server,i)))
+    players.append({'index': i,
+                    'name': get_player_name(server,i),
+                    'id': get_player_id(server,i)})
   return players
 
 def play(server, id):

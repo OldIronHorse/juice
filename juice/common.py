@@ -1,11 +1,7 @@
-from collections import namedtuple
 from telnetlib import Telnet
 from urllib.parse import unquote
 from juice.message.parse import parse_msg
 from threading import Thread
-
-PlayerMessage = namedtuple('PlayerMessage',
-                           'player_id name msg_type start per_page tags')
 
 def connect(host,port=9090):
   return Telnet(host,port)
