@@ -28,6 +28,6 @@ class TestGetArtists(TestWithCLI):
                       {'id': 1326, 'name': "Oleta Adams"}],
                      get_artists(self.tn))
     self.tn.read_until.assert_called_once_with(b'\n')
-    self.tn.write.assert_called_once_with(b'artists 0 9999 tags:lytiqwaS\n')
+    self.tn.write.assert_called_once_with(b'artists 0 9999 tags:lytiqwaSes\n')
 
 

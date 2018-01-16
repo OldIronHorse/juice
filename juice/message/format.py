@@ -40,7 +40,7 @@ def total(category):
   return 'info total {} ?\n'.format(category)
 
 def category_query(category, start, page_size, filtres):
-  msg = '{} {} {} tags:lytiqwaS'.format(category, start, page_size)
+  msg = '{} {} {} tags:lytiqwaSes'.format(category, start, page_size)
   for k in sorted(filtres.keys()):
     msg += ' {}:{}'.format(k, filtres[k])
   return msg + '\n'
