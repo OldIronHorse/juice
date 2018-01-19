@@ -126,3 +126,5 @@ class TestGetPlayerInfo(TestWithServer):
     self.assertEqual('00:12:34:56:78:90', get_player_id(self.tn,2))
     self.tn.write.assert_called_once_with(b'player id 2 ?\n')
     self.tn.read_until.assert_called_once_with(b'\n')
+
+

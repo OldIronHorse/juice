@@ -68,3 +68,8 @@ def next_track(server, player_id):
 def previous_track(server, player_id):
   server.write(msg_format.previous_track(player_id).encode('ascii'))
   server.read_until(b'\n')
+
+def player_playlist_play(server, player_id, url):
+  server.write(msg_format.player_playlist_play(player_id, url).encode('ascii'))
+  server.read_until(b'\n')
+

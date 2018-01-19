@@ -40,7 +40,7 @@ def total(category):
   return 'info total {} ?\n'.format(category)
 
 def category_query(category, start, page_size, filtres):
-  msg = '{} {} {} tags:lytiqwaSes'.format(category, start, page_size)
+  msg = '{} {} {} tags:lytiqwaSesu'.format(category, start, page_size)
   for k in sorted(filtres.keys()):
     msg += ' {}:{}'.format(k, filtres[k])
   return msg + '\n'
@@ -73,3 +73,6 @@ def next_track(player_id):
 
 def previous_track(player_id):
   return player_by_id(player_id, 'playlist index', '-1')
+
+def player_playlist_play(player_id, path):
+  return '{} playlist play {}\n'.format(player_id, path)

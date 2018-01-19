@@ -23,9 +23,7 @@ def get_tracks(server, **kwargs):
   request = msg_format.tracks(**kwargs)
   server.write(request.encode('ascii'))
   reply = server.read_until(b'\n').decode('ascii')
-  print(reply)
   tracks = parse_msg(reply)['tracks']
-  print(tracks)
   return tracks
 
 def get_genres(server, **kwargs):
