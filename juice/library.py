@@ -5,15 +5,15 @@ from .message import format as msg_format
 
 Artist = namedtuple('Artist','name id')
 
-def get_artists(server, **kwargs):
-  request = msg_format.artists(page_size=9999, **kwargs)
+def get_artists(server, page_size=9999, **kwargs):
+  request = msg_format.artists(page_size=page_size, **kwargs)
   server.write(request.encode('ascii'))
   reply = server.read_until(b'\n').decode('ascii')
   artists = parse_msg(reply)['artists']
   return artists
 
-def get_albums(server, **kwargs):
-  request = msg_format.albums(page_size=9999, **kwargs)
+def get_albums(server, page_size=9999, **kwargs):
+  request = msg_format.albums(page_size=page_size, **kwargs)
   server.write(request.encode('ascii'))
   reply = server.read_until(b'\n').decode('ascii')
   albums = parse_msg(reply)['albums']
@@ -36,8 +36,8 @@ def get_genres(server, **kwargs):
   #print(genres)
   return genres
 
-def get_years(server, **kwargs):
-  request = msg_format.years(page_size=9999, **kwargs)
+def get_years(server, page_size=9999, **kwargs):
+  request = msg_format.years(page_size=page_size, **kwargs)
   server.write(request.encode('ascii'))
   reply = server.read_until(b'\n').decode('ascii')
   years = parse_msg(reply)['years']

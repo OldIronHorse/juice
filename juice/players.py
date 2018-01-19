@@ -69,7 +69,11 @@ def previous_track(server, player_id):
   server.write(msg_format.previous_track(player_id).encode('ascii'))
   server.read_until(b'\n')
 
-def player_playlist_play(server, player_id, url):
-  server.write(msg_format.player_playlist_play(player_id, url).encode('ascii'))
+def player_playlist_control(server, player_id, cmd, **kwargs):
+  server.write(msg_format.player_playlist_control(player_id, cmd, **kwargs).encode('ascii'))
   server.read_until(b'\n')
 
+def player_playlist_delete(server, player_id, index):
+  server.write(msg_format.player_playlist_delete(player_id, index).encode('ascii'))
+  server.read_until(b'\n')
+  

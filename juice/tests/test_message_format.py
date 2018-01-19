@@ -225,6 +225,11 @@ class TestPlayerCommands(TestCase):
 class TestPlayerPlaylistCommands(TestCase):
   def test_play(self):
     self.assertEqual(
-      '04:20:00:12:23:45 playlist play /music/abba/01_Voulez_Vous.mp3\n',
-      msg_format.player_playlist_play('04:20:00:12:23:45',
-                                      '/music/abba/01_Voulez_Vous.mp3'))
+      '04:20:00:12:23:45 playlistcontrol cmd:load track_id:1234\n',
+      msg_format.player_playlist_control('04:20:00:12:23:45', 
+        'load', 
+        track_id=1234))
+
+  def test_delete(self):
+    self.assertEqual('04:20:00:12:23:45 playlist delete 4\n',
+      msg_format.player_playlist_delete('04:20:00:12:23:45', 4))

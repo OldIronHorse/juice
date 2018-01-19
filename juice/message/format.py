@@ -74,5 +74,13 @@ def next_track(player_id):
 def previous_track(player_id):
   return player_by_id(player_id, 'playlist index', '-1')
 
-def player_playlist_play(player_id, path):
-  return '{} playlist play {}\n'.format(player_id, path)
+def player_playlist_control(player_id, cmd, **kwargs):
+  msg = '{} playlistcontrol cmd:{}'.format(player_id, cmd)
+  print(msg)
+  for k in kwargs.keys():
+    msg += ' {}:{}'.format(k, kwargs[k])
+  print(msg)
+  return msg +'\n'
+
+def player_playlist_delete(player_id, index):
+  return '{} playlist delete {}\n'.format(player_id, index)

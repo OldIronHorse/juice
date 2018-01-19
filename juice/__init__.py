@@ -2,7 +2,8 @@
 
 from .players import get_players, get_player_count, get_player_name, \
   get_player_id, play, pause, state, get_player_volume, \
-  set_player_volume, next_track, previous_track, player_playlist_play
+  set_player_volume, next_track, previous_track, player_playlist_control, \
+  player_playlist_delete
 
 from .playlists import get_playing_track, get_current_playlist
 
