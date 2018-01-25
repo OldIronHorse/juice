@@ -204,11 +204,11 @@ class TestArtists(TestCase):
 
 class TestPlayerStatus(TestCase):
   def test_defaults(self):
-    self.assertEqual('00:12:34:56:78:90 status - 100 tags:al\n',
+    self.assertEqual('00:12:34:56:78:90 status - 100 tags:ales\n',
       msg_format.player_status('00:12:34:56:78:90'))
 
   def test_subscribe_defaults(self):
-    self.assertEqual('00:12:34:56:78:90 status - 100 tags:al subscribe:0\n',
+    self.assertEqual('00:12:34:56:78:90 status - 100 tags:ales subscribe:0\n',
       msg_format.player_status('00:12:34:56:78:90', subscribe=0))
 
 

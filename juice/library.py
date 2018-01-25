@@ -7,8 +7,10 @@ Artist = namedtuple('Artist','name id')
 
 def get_artists(server, page_size=9999, **kwargs):
   request = msg_format.artists(page_size=page_size, **kwargs)
+  #print('get_artists: request=', request)
   server.write(request.encode('ascii'))
   reply = server.read_until(b'\n').decode('ascii')
+  #pirint('get_artists: reply=', reply)
   artists = parse_msg(reply)['artists']
   return artists
 

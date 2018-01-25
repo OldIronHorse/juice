@@ -145,7 +145,7 @@ def parse_cmd_status(reply, cmd, fields):
       track = {'index': int(v)}
     elif k == 'id':
       track['id'] = int(v)
-    elif k in ['id', 'title', 'album', 'artist']:
+    elif k in ['id', 'title', 'album', 'artist', 'album_id', 'artist_id']:
       track[k] = v
     else:
       reply[k] = try_numeric(v)
