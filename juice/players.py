@@ -75,5 +75,8 @@ def player_playlist_control(server, player_id, cmd, **kwargs):
 
 def player_playlist_delete(server, player_id, index):
   server.write(msg_format.player_playlist_delete(player_id, index).encode('ascii'))
-  server.read_until(b'\n')
+  print('player_playlist_delete:', server.read_until(b'\n').decode('ascii'))
   
+def status(server, player_id):
+  server.write(msg_format.player_status(player_id, start=0, page_size=9999).encode('ascii'))
+  return parse_msg(server.read_until(b'\n').decode('ascii'))
