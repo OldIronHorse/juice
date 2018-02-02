@@ -251,7 +251,9 @@ def parse_library(msg):
       elif k == result_type:
         result_list[-1]['name'] = v
       elif k == 'count':
-          reply[k] = int(v)
+        reply[k] = int(v)
+      elif k in ['artwork_track_id']:
+        result_list[-1][k] = v
       else:
         result_list[-1][k] = try_numeric(v)
     else:

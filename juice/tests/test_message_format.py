@@ -136,69 +136,69 @@ class TestInfo(TestCase):
 
 class TestGenres(TestCase):
   def test_no_filtres_defaults(self):
-    self.assertEqual('genres 0 100 tags:lytiqwaSesu\n',
+    self.assertEqual('genres 0 100 tags:lytiqwaSesucj\n',
       msg_format.genres())
 
   def test_no_filtres_override(self):
-    self.assertEqual('genres 5 11 tags:lytiqwaSesu\n',
+    self.assertEqual('genres 5 11 tags:lytiqwaSesucj\n',
       msg_format.genres(5, 11))
 
   def test_artist_filtre(self):
-    self.assertEqual('genres 0 100 tags:lytiqwaSesu artist_id:4\n',
+    self.assertEqual('genres 0 100 tags:lytiqwaSesucj artist_id:4\n',
       msg_format.genres(artist_id=4))
 
   def test_album_filtre(self):
-    self.assertEqual('genres 0 100 tags:lytiqwaSesu album_id:4\n',
+    self.assertEqual('genres 0 100 tags:lytiqwaSesucj album_id:4\n',
       msg_format.genres(album_id=4))
 
   def test_track_filtre(self):
-    self.assertEqual('genres 0 100 tags:lytiqwaSesu track_id:4\n',
+    self.assertEqual('genres 0 100 tags:lytiqwaSesucj track_id:4\n',
       msg_format.genres(track_id=4))
 
   def test_genre_filtre(self):
-    self.assertEqual('genres 0 100 tags:lytiqwaSesu genre_id:4\n',
+    self.assertEqual('genres 0 100 tags:lytiqwaSesucj genre_id:4\n',
       msg_format.genres(genre_id=4))
 
   def test_year_filtre(self):
-    self.assertEqual('genres 0 100 tags:lytiqwaSesu year:1994\n',
+    self.assertEqual('genres 0 100 tags:lytiqwaSesucj year:1994\n',
       msg_format.genres(year=1994))
 
   def test_multiple_filtres(self):
-    self.assertEqual('genres 0 100 tags:lytiqwaSesu artist_id:4 year:1994\n',
+    self.assertEqual('genres 0 100 tags:lytiqwaSesucj artist_id:4 year:1994\n',
       msg_format.genres(artist_id=4, year=1994))
 
 
 class TestArtists(TestCase):
   def test_no_filtres_defaults(self):
-    self.assertEqual('artists 0 100 tags:lytiqwaSesu\n',
+    self.assertEqual('artists 0 100 tags:lytiqwaSesucj\n',
       msg_format.artists())
 
   def test_no_filtres_override(self):
-    self.assertEqual('artists 5 11 tags:lytiqwaSesu\n',
+    self.assertEqual('artists 5 11 tags:lytiqwaSesucj\n',
       msg_format.artists(5, 11))
 
   def test_artist_filtre(self):
-    self.assertEqual('artists 0 100 tags:lytiqwaSesu artist_id:4\n',
+    self.assertEqual('artists 0 100 tags:lytiqwaSesucj artist_id:4\n',
       msg_format.artists(artist_id=4))
 
   def test_album_filtre(self):
-    self.assertEqual('artists 0 100 tags:lytiqwaSesu album_id:4\n',
+    self.assertEqual('artists 0 100 tags:lytiqwaSesucj album_id:4\n',
       msg_format.artists(album_id=4))
 
   def test_track_filtre(self):
-    self.assertEqual('artists 0 100 tags:lytiqwaSesu track_id:4\n',
+    self.assertEqual('artists 0 100 tags:lytiqwaSesucj track_id:4\n',
       msg_format.artists(track_id=4))
 
   def test_genre_filtre(self):
-    self.assertEqual('artists 0 100 tags:lytiqwaSesu genre_id:4\n',
+    self.assertEqual('artists 0 100 tags:lytiqwaSesucj genre_id:4\n',
       msg_format.artists(genre_id=4))
 
   def test_year_filtre(self):
-    self.assertEqual('artists 0 100 tags:lytiqwaSesu year:1994\n',
+    self.assertEqual('artists 0 100 tags:lytiqwaSesucj year:1994\n',
       msg_format.artists(year=1994))
 
   def test_multiple_filtres(self):
-    self.assertEqual('artists 0 100 tags:lytiqwaSesu artist_id:4 year:1994\n',
+    self.assertEqual('artists 0 100 tags:lytiqwaSesucj artist_id:4 year:1994\n',
       msg_format.artists(artist_id=4, year=1994))
 
 

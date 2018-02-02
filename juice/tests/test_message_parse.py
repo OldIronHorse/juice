@@ -477,6 +477,28 @@ class TestAlbums(TestCase):
       ]},
       parse_msg('albums 102 1 tags%3AlytiqwaS id%3A558 album%3AClassics%20for%20Children year%3A1999 title%3AClassics%20for%20Children disc%3A2 disccount%3A2 compilation%3A1 artist_id%3A3 artist%3AVarious%20Artists count%3A597'))
 
+  def test_artwork_track_id(self):
+    self.assertEqual({
+        'album_id': 728,
+        'albums': [{
+          'artist': 'Elbow',
+          'artist_id': 1584,
+          'artwork_track_id': '7362e669',
+          'compilation': 0,
+          'disc': 2,
+          'disccount': 2,
+          'id': 728,
+          'name': 'The Best Of (Delux)',
+          'textkey': 'B',
+          'title': 'The Best Of (Delux)',
+          'year': 2017
+        }],
+        'count': 1,
+        'page_size': 2,
+        'start': 0,
+        'tags': 'lytiqwaSesucj'
+      },
+      parse_msg('albums 0 2 tags%3AlytiqwaSesucj album_id%3A728 id%3A728 album%3AThe%20Best%20Of%20(Delux) year%3A2017 artwork_track_id%3A7362e669 title%3AThe%20Best%20Of%20(Delux) disc%3A2 disccount%3A2 compilation%3A0 artist_id%3A1584 artist%3AElbow textkey%3AB count%3A1'))
 
 class TestYears(TestCase):
   def setUp(self):
